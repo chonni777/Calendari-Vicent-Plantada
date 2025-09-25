@@ -1,0 +1,114 @@
+<!--
+  index.html – Contador de días de colegio Vicent Plantada (Mollet)
+  Curso 2025–2026: del 8 de septiembre de 2025 al 19 de junio de 2026
+  Festivos incluidos: Vacances de Nadal y Setmana Santa
+-->
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contador de días de colegio – Vicent Plantada</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#0f1724;color:#f1f5f9;margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
+    .card{background:#1e293b;padding:20px;border-radius:12px;max-width:700px;width:100%;box-shadow:0 8px 20px rgba(0,0,0,0.5)}
+    h1{margin-top:0;font-size:1.6rem}
+    label{display:block;margin-top:10px;font-size:0.9rem;color:#94a3b8}
+    input,textarea{width:100%;padding:8px;margin-top:4px;border-radius:6px;border:1px solid #334155;background:#0f172a;color:#f1f5f9}
+    .stats{margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:15px}
+    .stat{background:#0f172a;padding:12px;border-radius:8px;text-align:center}
+    .stat .big{font-size:2rem;font-weight:bold}
+    .progress{margin-top:20px;height:16px;background:#334155;border-radius:999px;overflow:hidden}
+    .bar{height:100%;background:linear-gradient(90deg,#10b981,#06b6d4);width:0%;transition:width 0.5s ease}
+    .small{font-size:0.85rem;color:#94a3b8;margin-top:6px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Contador de días – Vicent Plantada (Mollet)</h1>
+    <p>Curso 2025–2026: del <strong>8/09/2025</strong> al <strong>19/06/2026</strong></p>
+
+    <label><input id="excludeWeekends" type="checkbox" checked> Excluir fines de semana</label>
+
+    <label for="holidays">Festivos (ya cargados por defecto)</label>
+    <textarea id="holidays" rows="6"></textarea>
+
+    <div class="stats">
+      <div class="stat"><div>Días totales</div><div id="totalDays" class="big">—</div></div>
+      <div class="stat"><div>Días transcurridos</div><div id="elapsedDays" class="big">—</div></div>
+      <div class="stat"><div>Días restantes</div><div id="remainingDays" class="big">—</div></div>
+      <div class="stat"><div>Progreso</div><div id="percentText" class="big">—%</div></div>
+    </div>
+
+    <div class="progress"><div id="bar" class="bar"></div></div>
+    <div class="small">Hoy es <span id="todayDate">—</span></div>
+  </div>
+
+  <script>
+    function fmtDate(d){return d.toISOString().slice(0,10)}
+    function parseDate(s){return new Date(s+'T00:00:00')}
+
+    function eachDayCount(start,end,excludeWeekends,holidaysSet){
+      let cnt=0;for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
+        if(excludeWeekends&&(d.getDay()===0||d.getDay()===6)) continue;
+        if(holidaysSet.has(fmtDate(d))) continue;
+        cnt++
+      }return cnt
+    }
+
+    const els={
+      holidays:document.getElementById('holidays'),
+      excludeWeekends:document.getElementById('excludeWeekends'),
+      totalDays:document.getElementById('totalDays'),
+      elapsedDays:document.getElementById('elapsedDays'),
+      remainingDays:document.getElementById('remainingDays'),
+      bar:document.getElementById('bar'),
+      percentText:document.getElementById('percentText'),
+      todayDate:document.getElementById('todayDate')
+    }
+
+    const start=parseDate('2025-09-08')
+    const end=parseDate('2026-06-19')
+
+    const presetHolidays=[
+      // Nadal
+      '2025-12-20','2025-12-21','2025-12-22','2025-12-23','2025-12-24','2025-12-25','2025-12-26','2025-12-27','2025-12-28','2025-12-29','2025-12-30','2025-12-31','2026-01-01','2026-01-02','2026-01-03','2026-01-04','2026-01-05','2026-01-06','2026-01-07',
+      // Setmana Santa
+      '2026-03-28','2026-03-29','2026-03-30','2026-03-31','2026-04-01','2026-04-02','2026-04-03','2026-04-04','2026-04-05','2026-04-06'
+    ]
+    els.holidays.value=presetHolidays.join('\n')
+
+    function compute(){
+      const today=new Date();today.setHours(0,0,0,0)
+      els.todayDate.textContent=fmtDate(today)
+      const holidays=new Set(els.holidays.value.split('\n').map(s=>s.trim()).filter(Boolean))
+      const exclude=els.excludeWeekends.checked
+      const total=eachDayCount(start,end,exclude,holidays)
+      let elapsed=0
+      if(today<start) elapsed=0
+      else if(today>end) elapsed=total
+      else elapsed=eachDayCount(start,today,exclude,holidays)
+      const remaining=Math.max(0,total-elapsed)
+      const pct=total===0?100:Math.round((elapsed/total)*1000)/10
+      els.totalDays.textContent=total
+      els.elapsedDays.textContent=elapsed
+      els.remainingDays.textContent=remaining
+      els.bar.style.width=pct+'%'
+      els.percentText.textContent=pct+'%'
+    }
+
+    compute()
+    els.excludeWeekends.addEventListener('change',compute)
+    els.holidays.addEventListener('input',compute)
+
+    // actualizar cada medianoche
+    function schedule(){
+      const now=new Date();
+      const next=new Date(now);next.setHours(24,0,0,0);
+      setTimeout(()=>{compute();schedule()},next-now+50)
+    }
+    schedule()
+  </script>
+</body>
+</html>
