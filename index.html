@@ -1,7 +1,7 @@
 <!--
-  index.html – Contador de días de colegio Vicent Plantada (Mollet)
+  index.html – Contador de días y horas de colegio Vicent Plantada (Mollet)
   Curso 2025–2026: del 8 de septiembre de 2025 al 19 de junio de 2026
-  Festivos incluidos: Vacances de Nadal y Setmana Santa
+  Incluye vacaciones de Nadal y Setmana Santa
 -->
 
 <!doctype html>
@@ -9,10 +9,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Contador de días de colegio – Vicent Plantada</title>
+  <title>Contador de días y horas – Vicent Plantada</title>
   <style>
     body{font-family:Arial,Helvetica,sans-serif;background:#0f1724;color:#f1f5f9;margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
-    .card{background:#1e293b;padding:20px;border-radius:12px;max-width:700px;width:100%;box-shadow:0 8px 20px rgba(0,0,0,0.5)}
+    .card{background:#1e293b;padding:20px;border-radius:12px;max-width:750px;width:100%;box-shadow:0 8px 20px rgba(0,0,0,0.5)}
     h1{margin-top:0;font-size:1.6rem}
     label{display:block;margin-top:10px;font-size:0.9rem;color:#94a3b8}
     input,textarea{width:100%;padding:8px;margin-top:4px;border-radius:6px;border:1px solid #334155;background:#0f172a;color:#f1f5f9}
@@ -21,7 +21,7 @@
     .stat .big{font-size:2rem;font-weight:bold}
     .progress{margin-top:20px;height:16px;background:#334155;border-radius:999px;overflow:hidden}
     .bar{height:100%;background:linear-gradient(90deg,#10b981,#06b6d4);width:0%;transition:width 0.5s ease}
-    .small{font-size:0.85rem;color:#94a3b8;margin-top:6px}
+    .small{font-size:0.85rem;color:#94a3b8;margin-top:6px;text-align:center}
   </style>
 </head>
 <body>
@@ -39,6 +39,8 @@
       <div class="stat"><div>Días transcurridos</div><div id="elapsedDays" class="big">—</div></div>
       <div class="stat"><div>Días restantes</div><div id="remainingDays" class="big">—</div></div>
       <div class="stat"><div>Progreso</div><div id="percentText" class="big">—%</div></div>
+      <div class="stat"><div>Horas transcurridas</div><div id="elapsedHours" class="big">—</div></div>
+      <div class="stat"><div>Horas restantes</div><div id="remainingHours" class="big">—</div></div>
     </div>
 
     <div class="progress"><div id="bar" class="bar"></div></div>
@@ -50,11 +52,13 @@
     function parseDate(s){return new Date(s+'T00:00:00')}
 
     function eachDayCount(start,end,excludeWeekends,holidaysSet){
-      let cnt=0;for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
-        if(excludeWeekends&&(d.getDay()===0||d.getDay()===6)) continue;
-        if(holidaysSet.has(fmtDate(d))) continue;
+      let cnt=0
+      for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
+        if(excludeWeekends&&(d.getDay()===0||d.getDay()===6)) continue
+        if(holidaysSet.has(fmtDate(d))) continue
         cnt++
-      }return cnt
+      }
+      return cnt
     }
 
     const els={
@@ -65,7 +69,9 @@
       remainingDays:document.getElementById('remainingDays'),
       bar:document.getElementById('bar'),
       percentText:document.getElementById('percentText'),
-      todayDate:document.getElementById('todayDate')
+      todayDate:document.getElementById('todayDate'),
+      elapsedHours:document.getElementById('elapsedHours'),
+      remainingHours:document.getElementById('remainingHours')
     }
 
     const start=parseDate('2025-09-08')
@@ -82,30 +88,43 @@
     function compute(){
       const today=new Date();today.setHours(0,0,0,0)
       els.todayDate.textContent=fmtDate(today)
+
       const holidays=new Set(els.holidays.value.split('\n').map(s=>s.trim()).filter(Boolean))
       const exclude=els.excludeWeekends.checked
+
       const total=eachDayCount(start,end,exclude,holidays)
       let elapsed=0
       if(today<start) elapsed=0
       else if(today>end) elapsed=total
       else elapsed=eachDayCount(start,today,exclude,holidays)
+
       const remaining=Math.max(0,total-elapsed)
       const pct=total===0?100:Math.round((elapsed/total)*1000)/10
+
+      // Cálculo de horas
+      const hoursPerDay=6.5
+      const elapsedHours=Math.round(elapsed*hoursPerDay*10)/10
+      const remainingHours=Math.round(remaining*hoursPerDay*10)/10
+
+      // Mostrar resultados
       els.totalDays.textContent=total
       els.elapsedDays.textContent=elapsed
       els.remainingDays.textContent=remaining
-      els.bar.style.width=pct+'%'
       els.percentText.textContent=pct+'%'
+      els.bar.style.width=pct+'%'
+      els.elapsedHours.textContent=elapsedHours
+      els.remainingHours.textContent=remainingHours
     }
 
     compute()
     els.excludeWeekends.addEventListener('change',compute)
     els.holidays.addEventListener('input',compute)
 
-    // actualizar cada medianoche
+    // Actualizar cada medianoche
     function schedule(){
-      const now=new Date();
-      const next=new Date(now);next.setHours(24,0,0,0);
+      const now=new Date()
+      const next=new Date(now)
+      next.setHours(24,0,0,0)
       setTimeout(()=>{compute();schedule()},next-now+50)
     }
     schedule()
