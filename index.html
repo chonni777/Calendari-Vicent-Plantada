@@ -1,15 +1,10 @@
-<!--
-  index.html – Contador de días y horas de colegio Vicent Plantada (Mollet)
-  Curso 2025–2026: del 8 de septiembre de 2025 al 19 de junio de 2026
-  Incluye vacaciones de Nadal y Setmana Santa
--->
-
 <!doctype html>
 <html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Contador de días y horas – Vicent Plantada</title>
+  <link rel="icon" type="image/png" href="logo.png">
   <style>
     body{font-family:Arial,Helvetica,sans-serif;background:#0f1724;color:#f1f5f9;margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
     .card{background:#1e293b;padding:20px;border-radius:12px;max-width:750px;width:100%;box-shadow:0 8px 20px rgba(0,0,0,0.5)}
@@ -22,6 +17,12 @@
     .progress{margin-top:20px;height:16px;background:#334155;border-radius:999px;overflow:hidden}
     .bar{height:100%;background:linear-gradient(90deg,#10b981,#06b6d4);width:0%;transition:width 0.5s ease}
     .small{font-size:0.85rem;color:#94a3b8;margin-top:6px;text-align:center}
+    .trimestre{margin-top:30px;background:#0f172a;padding:16px;border-radius:10px;text-align:center}
+    .trimestre h2{margin:0 0 8px;font-size:1.2rem}
+    .trim-dates{color:#94a3b8;font-size:0.9rem;margin-bottom:10px}
+    .trim-bar{height:14px;background:#334155;border-radius:999px;overflow:hidden;margin-top:8px}
+    .trim-bar-inner{height:100%;background:linear-gradient(90deg,#fbbf24,#22d3ee);width:0%;transition:width 0.5s ease}
+    .trim-info{font-size:0.9rem;margin-top:6px;color:#cbd5e1}
   </style>
 </head>
 <body>
@@ -45,12 +46,24 @@
 
     <div class="progress"><div id="bar" class="bar"></div></div>
     <div class="small">Hoy es <span id="todayDate">—</span></div>
+
+    <div id="trimestreActual" class="trimestre" style="display:none;">
+      <h2 id="triTitle">—</h2>
+      <div class="trim-dates" id="triDates">—</div>
+      <div class="trim-bar"><div id="triBar" class="trim-bar-inner"></div></div>
+      <div class="trim-info">
+        <span id="triPct">—%</span> completado – 
+        <span id="triRemain">—</span> días restantes
+      </div>
+    </div>
+    <div id="afterTris" class="small" style="display:none;margin-top:10px;">
+      Después: recuperaciones y colonias
+    </div>
   </div>
 
   <script>
     function fmtDate(d){return d.toISOString().slice(0,10)}
     function parseDate(s){return new Date(s+'T00:00:00')}
-
     function eachDayCount(start,end,excludeWeekends,holidaysSet){
       let cnt=0
       for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
@@ -71,7 +84,14 @@
       percentText:document.getElementById('percentText'),
       todayDate:document.getElementById('todayDate'),
       elapsedHours:document.getElementById('elapsedHours'),
-      remainingHours:document.getElementById('remainingHours')
+      remainingHours:document.getElementById('remainingHours'),
+      triBox:document.getElementById('trimestreActual'),
+      triTitle:document.getElementById('triTitle'),
+      triDates:document.getElementById('triDates'),
+      triBar:document.getElementById('triBar'),
+      triPct:document.getElementById('triPct'),
+      triRemain:document.getElementById('triRemain'),
+      afterTris:document.getElementById('afterTris')
     }
 
     const start=parseDate('2025-09-08')
@@ -84,6 +104,34 @@
       '2026-03-28','2026-03-29','2026-03-30','2026-03-31','2026-04-01','2026-04-02','2026-04-03','2026-04-04','2026-04-05','2026-04-06'
     ]
     els.holidays.value=presetHolidays.join('\n')
+
+    const trimestres=[
+      {nombre:"1r trimestre",start:parseDate('2025-09-08'),end:parseDate('2025-11-28')},
+      {nombre:"2n trimestre",start:parseDate('2025-12-01'),end:parseDate('2026-03-06')},
+      {nombre:"3r trimestre",start:parseDate('2026-06-03'),end:parseDate('2026-06-05')}
+    ]
+
+    function computeTrimestre(today,exclude,holidays){
+      els.triBox.style.display="none"
+      els.afterTris.style.display="none"
+      for(const tri of trimestres){
+        if(today>=tri.start && today<=tri.end){
+          const total=eachDayCount(tri.start,tri.end,exclude,holidays)
+          const elapsed=eachDayCount(tri.start,today,exclude,holidays)
+          const remaining=Math.max(0,total-elapsed)
+          const pct=total===0?100:Math.round((elapsed/total)*1000)/10
+          els.triTitle.textContent=tri.nombre
+          els.triDates.textContent=`${fmtDate(tri.start)} – ${fmtDate(tri.end)}`
+          els.triPct.textContent=pct+"%"
+          els.triRemain.textContent=remaining
+          els.triBar.style.width=pct+"%"
+          els.triBox.style.display="block"
+          return
+        }
+      }
+      // Si ya pasaron los trimestres
+      els.afterTris.style.display="block"
+    }
 
     function compute(){
       const today=new Date();today.setHours(0,0,0,0)
@@ -101,12 +149,11 @@
       const remaining=Math.max(0,total-elapsed)
       const pct=total===0?100:Math.round((elapsed/total)*1000)/10
 
-      // Cálculo de horas
+      // Horas
       const hoursPerDay=6.5
       const elapsedHours=Math.round(elapsed*hoursPerDay*10)/10
       const remainingHours=Math.round(remaining*hoursPerDay*10)/10
 
-      // Mostrar resultados
       els.totalDays.textContent=total
       els.elapsedDays.textContent=elapsed
       els.remainingDays.textContent=remaining
@@ -114,6 +161,8 @@
       els.bar.style.width=pct+'%'
       els.elapsedHours.textContent=elapsedHours
       els.remainingHours.textContent=remainingHours
+
+      computeTrimestre(today,exclude,holidays)
     }
 
     compute()
