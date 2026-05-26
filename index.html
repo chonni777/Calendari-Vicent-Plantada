@@ -324,6 +324,7 @@ function actualizarHorario(){
 }
 
 // Mostrar horario completo
+// Mostrar horario desplegable
 document.getElementById("showScheduleBtn").addEventListener("click",()=>{
 
   const box = document.getElementById("scheduleBox")
@@ -344,9 +345,31 @@ document.getElementById("showScheduleBtn").addEventListener("click",()=>{
     for(let d=1;d<=5;d++){
 
       html += `
-        <h3 style="margin-top:15px;color:#22d3ee;">
-          ${dias[d]}
-        </h3>
+        <div style="
+          margin-top:12px;
+          background:#1e293b;
+          border-radius:8px;
+          overflow:hidden;
+        ">
+
+          <button onclick="toggleDia(${d})" style="
+            width:100%;
+            text-align:left;
+            padding:12px;
+            border:none;
+            background:#0f172a;
+            color:#22d3ee;
+            font-size:1rem;
+            font-weight:bold;
+            cursor:pointer;
+          ">
+            ${dias[d]}
+          </button>
+
+          <div id="dia${d}" style="
+            display:none;
+            padding:10px;
+          ">
       `
 
       for(let i=0;i<franjas.length;i++){
@@ -355,7 +378,7 @@ document.getElementById("showScheduleBtn").addEventListener("click",()=>{
           <div style="
             padding:8px;
             margin-top:6px;
-            background:#1e293b;
+            background:#111827;
             border-radius:6px;
           ">
             <strong>${franjas[i].inicio} - ${franjas[i].fin}</strong>
@@ -363,6 +386,11 @@ document.getElementById("showScheduleBtn").addEventListener("click",()=>{
           </div>
         `
       }
+
+      html += `
+          </div>
+        </div>
+      `
     }
 
     box.innerHTML = html
@@ -372,6 +400,29 @@ document.getElementById("showScheduleBtn").addEventListener("click",()=>{
     box.style.display="none"
   }
 })
+
+// Abrir/cerrar días
+function toggleDia(dia){
+
+  // cerrar todos
+  for(let i=1;i<=5;i++){
+
+    const otro = document.getElementById("dia"+i)
+
+    if(i!==dia){
+      otro.style.display="none"
+    }
+  }
+
+  // abrir/cerrar el seleccionado
+  const actual = document.getElementById("dia"+dia)
+
+  if(actual.style.display==="none"){
+    actual.style.display="block"
+  }else{
+    actual.style.display="none"
+  }
+}
 
 // Actualizar cada minuto
 actualizarHorario()
