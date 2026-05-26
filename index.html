@@ -84,7 +84,7 @@
     font-weight:bold;
     cursor:pointer;
   ">
-    Ver horario completo
+    Ver Horario
   </button>
 
   <div id="scheduleBox" style="
@@ -331,6 +331,7 @@ document.getElementById("showScheduleBtn").addEventListener("click",()=>{
 
   if(box.style.display==="none"){
 
+  document.getElementById("showScheduleBtn").textContent="Cerrar horario"
     const dias = [
       "",
       "Lunes",
