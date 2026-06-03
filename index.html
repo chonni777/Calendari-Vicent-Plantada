@@ -86,17 +86,20 @@
   ">
     Ver Horario
   </button>
-  <button onclick="window.location.href=' https://chonni777.github.io/eufrasiowordle/'" style="
-  margin-top:20px;
-  padding:10px 16px;
-  border:none;
-  border-radius:8px;
-  background:#22c55e;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-">
-  Jugar a Wordle
+  
+<button onclick="toggleMenu()">Juegos</button>
+
+<div id="menuBotones" style="display:none; margin-top:10px;">
+    <button onclick="window.location.href=' https://chonni777.github.io/eufrasiowordle/'">Wordle</button>
+    <button onclick="window.location.href='https://chonni777.github.io/FNAFEpstein/'">Five Nights at Epstein's</button>
+</div>
+
+<script>
+function toggleMenu() {
+    const menu = document.getElementById("menuBotones");
+    menu.style.display = (menu.style.display === "none") ? "block" : "none";
+}
+</script>
 </button>
 
   <div id="scheduleBox" style="
