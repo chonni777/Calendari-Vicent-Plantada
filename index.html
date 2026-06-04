@@ -87,13 +87,25 @@
     Ver Horario
   </button>
   
-<button onclick="toggleMenu()">Juegos</button>
+  
+  <a href="https://chonni777.github.io/eufrasiojuegos/" class="boton-juegos">Juegos</a>
 
-<div id="menuBotones" style="display:none; margin-top:10px;">
-    <button onclick="window.location.href=' https://chonni777.github.io/eufrasiowordle/'">Wordle</button>
-    <button onclick="window.location.href='https://chonni777.github.io/FNAFEpstein/'">Five Nights at Epstein's</button>
-    <button onclick="window.location.href='https://chonni777.github.io/Geomtry-Dash/'">Geometry Dash</button>
-</div>
+<style>
+.boton-juegos{
+    display:inline-block;
+    padding:12px 24px;
+    background:#4CAF50;
+    color:white;
+    text-decoration:none;
+    border-radius:8px;
+    font-family:Arial, sans-serif;
+    font-size:18px;
+}
+
+.boton-juegos:hover{
+    background:#45a049;
+}
+</style>
 
 <script>
 function toggleMenu() {
