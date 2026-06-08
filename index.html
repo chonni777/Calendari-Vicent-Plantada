@@ -3,11 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Contador de días y horas - Vicent Plantada</title>
+  <title>Contador de días y horas – Vicent Plantada</title>
   <link rel="icon" type="image/png" href="logo.png">
   <style>
-    body{font-family:Arial,Helvetica,sans-serif;background:#0f1724;color:#f1f5f9;margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px;gap:20px;flex-wrap:wrap}
+    body{font-family:Arial,Helvetica,sans-serif;background:#0f1724;color:#f1f5f9;margin:0;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:20px;gap:20px;flex-wrap:wrap}
     .card{background:#1e293b;padding:20px;border-radius:12px;max-width:750px;width:100%;box-shadow:0 8px 20px rgba(0,0,0,0.5)}
+    .contador{flex:1 1 520px}
+    .lateral{flex:0 1 340px;max-width:340px}
     h1{margin-top:0;font-size:1.6rem}
     label{display:block;margin-top:10px;font-size:0.9rem;color:#94a3b8}
     input,textarea{width:100%;padding:8px;margin-top:4px;border-radius:6px;border:1px solid #334155;background:#0f172a;color:#f1f5f9}
@@ -23,14 +25,12 @@
     .trim-bar{height:14px;background:#334155;border-radius:999px;overflow:hidden;margin-top:8px}
     .trim-bar-inner{height:100%;background:linear-gradient(90deg,#fbbf24,#22d3ee);width:0%;transition:width 0.5s ease}
     .trim-info{font-size:0.9rem;margin-top:6px;color:#cbd5e1}
-    .boton-juegos{display:inline-block;padding:12px 24px;background:#4CAF50;color:white;text-decoration:none;border-radius:8px;font-family:Arial,sans-serif;font-size:18px;margin-top:20px}
-    .boton-juegos:hover{background:#45a049}
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Contador de días - Vicent Plantada (Mollet)</h1>
-    <p>Curso 2025-2026: del <strong>8/09/2025</strong> al <strong>19/06/2026</strong></p>
+  <div class="card contador">
+    <h1>Contador de días – Vicent Plantada (Mollet)</h1>
+    <p>Curso 2025–2026: del <strong>8/09/2025</strong> al <strong>19/06/2026</strong></p>
 
     <label><input id="excludeWeekends" type="checkbox" checked> Excluir fines de semana</label>
 
@@ -38,76 +38,118 @@
     <textarea id="holidays" rows="6"></textarea>
 
     <div class="stats">
-      <div class="stat"><div>Días totales</div><div id="totalDays" class="big">-</div></div>
-      <div class="stat"><div>Días transcurridos</div><div id="elapsedDays" class="big">-</div></div>
-      <div class="stat"><div>Días restantes</div><div id="remainingDays" class="big">-</div></div>
-      <div class="stat"><div>Progreso</div><div id="percentText" class="big">-%</div></div>
-      <div class="stat"><div>Horas transcurridas</div><div id="elapsedHours" class="big">-</div></div>
-      <div class="stat"><div>Horas restantes</div><div id="remainingHours" class="big">-</div></div>
+      <div class="stat"><div>Días totales</div><div id="totalDays" class="big">—</div></div>
+      <div class="stat"><div>Días transcurridos</div><div id="elapsedDays" class="big">—</div></div>
+      <div class="stat"><div>Días restantes</div><div id="remainingDays" class="big">—</div></div>
+      <div class="stat"><div>Progreso</div><div id="percentText" class="big">—%</div></div>
+      <div class="stat"><div>Horas transcurridas</div><div id="elapsedHours" class="big">—</div></div>
+      <div class="stat"><div>Horas restantes</div><div id="remainingHours" class="big">—</div></div>
     </div>
 
     <div class="progress"><div id="bar" class="bar"></div></div>
-    <div class="small">Hoy es <span id="todayDate">-</span></div>
+    <div class="small">Hoy es <span id="todayDate">—</span></div>
 
     <div id="trimestreActual" class="trimestre" style="display:none;">
-      <h2 id="triTitle">-</h2>
-      <div class="trim-dates" id="triDates">-</div>
+      <h2 id="triTitle">—</h2>
+      <div class="trim-dates" id="triDates">—</div>
       <div class="trim-bar"><div id="triBar" class="trim-bar-inner"></div></div>
       <div class="trim-info">
-        <span id="triPct">-%</span> completado -
-        <span id="triRemain">-</span> días restantes
+        <span id="triPct">—%</span> completado – 
+        <span id="triRemain">—</span> días restantes
       </div>
     </div>
-
     <div id="afterTris" class="small" style="display:none;margin-top:10px;">
       Después: recuperaciones y colonias
     </div>
   </div>
+  <!-- HORARIO -->
+<div class="card lateral">
+<div class="trimestre" style="margin-top:0;">
+  <h2>Horario actual</h2>
 
-  <div class="card">
-    <div class="trimestre" style="margin-top:0;">
-      <h2>Horario actual</h2>
-
-      <div class="stat" style="margin-top:15px;">
-        <div>Ahora toca</div>
-        <div id="currentClass" class="big">-</div>
-      </div>
-
-      <div class="stat" style="margin-top:15px;">
-        <div>Después toca</div>
-        <div id="nextClass" class="big">-</div>
-      </div>
-
-      <button id="showScheduleBtn" style="margin-top:20px;padding:10px 16px;border:none;border-radius:8px;background:#06b6d4;color:white;font-weight:bold;cursor:pointer;">
-        Ver horario
-      </button>
-
-      <a href="https://chonni777.github.io/eufrasiojuegos/" class="boton-juegos">Juegos</a>
-
-      <div id="scheduleBox" style="display:none;margin-top:20px;text-align:left;background:#111827;padding:15px;border-radius:10px;"></div>
-    </div>
+  <div class="stat" style="margin-top:15px;">
+    <div>Ahora toca</div>
+    <div id="currentClass" class="big">—</div>
   </div>
 
+  <div class="stat" style="margin-top:15px;">
+    <div>Después toca</div>
+    <div id="nextClass" class="big">—</div>
+  </div>
+
+  <button id="showScheduleBtn" style="
+    margin-top:20px;
+    padding:10px 16px;
+    border:none;
+    border-radius:8px;
+    background:#06b6d4;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+  ">
+    Ver Horario
+  </button>
+  
+  
+  <a href="https://chonni777.github.io/eufrasiojuegos/" class="boton-juegos">Juegos</a>
+
+<style>
+.boton-juegos{
+    display:inline-block;
+    padding:12px 24px;
+    background:#4CAF50;
+    color:white;
+    text-decoration:none;
+    border-radius:8px;
+    font-family:Arial, sans-serif;
+    font-size:18px;
+}
+
+.boton-juegos:hover{
+    background:#45a049;
+}
+</style>
+
 <script>
+function toggleMenu() {
+    const menu = document.getElementById("menuBotones");
+    menu.style.display = (menu.style.display === "none") ? "block" : "none";
+}
+</script>
+</button>
+
+  <div id="scheduleBox" style="
+    display:none;
+    margin-top:20px;
+    text-align:left;
+    background:#111827;
+    padding:15px;
+    border-radius:10px;
+  ">
+  </div>
+</div>
+</div>
+
+<script>
+  // ✅ FECHA LOCAL CORREGIDA
   function fmtDate(d){
     return d.getFullYear() + '-' +
            String(d.getMonth()+1).padStart(2,'0') + '-' +
            String(d.getDate()).padStart(2,'0');
   }
-
   function parseDate(s){
     const p = s.split('-').map(Number);
     return new Date(p[0], p[1]-1, p[2]);
   }
 
   function eachDayCount(start,end,excludeWeekends,holidaysSet){
-    let cnt=0;
+    let cnt=0
     for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
-      if(excludeWeekends&&(d.getDay()===0||d.getDay()===6)) continue;
-      if(holidaysSet.has(fmtDate(d))) continue;
-      cnt++;
+      if(excludeWeekends&&(d.getDay()===0||d.getDay()===6)) continue
+      if(holidaysSet.has(fmtDate(d))) continue
+      cnt++
     }
-    return cnt;
+    return cnt
   }
 
   const els={
@@ -128,302 +170,333 @@
     triPct:document.getElementById('triPct'),
     triRemain:document.getElementById('triRemain'),
     afterTris:document.getElementById('afterTris')
-  };
+  }
 
-  const start=parseDate('2025-09-08');
-  const end=parseDate('2026-06-19');
-
-  // Desde el 8/6/2026 se recorta la última hora.
-  const shortDayStart=parseDate('2026-06-08');
+  const start=parseDate('2025-09-08')
+  const end=parseDate('2026-06-19')
+  const shortDayStart=parseDate('2026-06-08')
 
   const presetHolidays=[
     '2025-12-20','2025-12-21','2025-12-22','2025-12-23','2025-12-24','2025-12-25','2025-12-26','2025-12-27','2025-12-28','2025-12-29','2025-12-30','2025-12-31',
     '2026-01-01','2026-01-02','2026-01-03','2026-01-04','2026-01-05','2026-01-06','2026-01-07',
-    '2026-03-28','2026-03-29','2026-03-30','2026-03-31','2026-04-01','2026-04-02','2026-04-03','2026-04-04','2026-04-05','2026-04-06',
-    '2026-05-01','2026-05-04','2026-05-12','2026-05-25','2026-05-27'
-  ];
-
-  els.holidays.value=presetHolidays.join('\n');
+    '2026-03-28','2026-03-29','2026-03-30','2026-03-31','2026-04-01','2026-04-02','2026-04-03','2026-04-04','2026-04-05','2026-04-06','2026-05-01','2026-05-04','2026-05-12','2026-05-25',
+    '2026-05-27',
+  ]
+  els.holidays.value=presetHolidays.join('\n')
 
   const trimestres=[
     {nombre:"1r trimestre",start:parseDate('2025-09-08'),end:parseDate('2025-11-28')},
     {nombre:"2n trimestre",start:parseDate('2025-12-01'),end:parseDate('2026-03-06')},
     {nombre:"3r trimestre",start:parseDate('2026-03-09'),end:parseDate('2026-06-05')}
-  ];
+  ]
 
   function computeTrimestre(today,exclude,holidays){
-    els.triBox.style.display="none";
-    els.afterTris.style.display="none";
-
+    els.triBox.style.display="none"
+    els.afterTris.style.display="none"
     for(const tri of trimestres){
       if(today>=tri.start && today<=tri.end){
-        const total=eachDayCount(tri.start,tri.end,exclude,holidays);
-        const elapsed=eachDayCount(tri.start,today,exclude,holidays);
-        const remaining=Math.max(0,total-elapsed);
-        const pct=total===0?100:Math.round((elapsed/total)*1000)/10;
-
-        els.triTitle.textContent=tri.nombre;
-        els.triDates.textContent=`${fmtDate(tri.start)} - ${fmtDate(tri.end)}`;
-        els.triPct.textContent=pct+"%";
-        els.triRemain.textContent=remaining;
-        els.triBar.style.width=pct+"%";
-        els.triBox.style.display="block";
-        return;
+        const total=eachDayCount(tri.start,tri.end,exclude,holidays)
+        const elapsed=eachDayCount(tri.start,today,exclude,holidays)
+        const remaining=Math.max(0,total-elapsed)
+        const pct=total===0?100:Math.round((elapsed/total)*1000)/10
+        els.triTitle.textContent=tri.nombre
+        els.triDates.textContent=`${fmtDate(tri.start)} – ${fmtDate(tri.end)}`
+        els.triPct.textContent=pct+"%"
+        els.triRemain.textContent=remaining
+        els.triBar.style.width=pct+"%"
+        els.triBox.style.display="block"
+        return
       }
     }
-
-    els.afterTris.style.display="block";
+    els.afterTris.style.display="block"
   }
 
   function compute(){
-    const today=new Date();
-    today.setHours(0,0,0,0);
-    els.todayDate.textContent=fmtDate(today);
+    const today=new Date();today.setHours(0,0,0,0)
+    els.todayDate.textContent=fmtDate(today)
 
-    const holidays=new Set(els.holidays.value.split('\n').map(s=>s.trim()).filter(Boolean));
-    const exclude=els.excludeWeekends.checked;
+    const holidays=new Set(els.holidays.value.split('\n').map(s=>s.trim()).filter(Boolean))
+    const exclude=els.excludeWeekends.checked
 
-    const total=eachDayCount(start,end,exclude,holidays);
+    const total=eachDayCount(start,end,exclude,holidays)
+    let elapsed=0
+    if(today<start) elapsed=0
+    else if(today>end) elapsed=total
+    else elapsed=eachDayCount(start,today,exclude,holidays)
 
-    let elapsed=0;
-    if(today<start) elapsed=0;
-    else if(today>end) elapsed=total;
-    else elapsed=eachDayCount(start,today,exclude,holidays);
-
-    const remaining=Math.max(0,total-elapsed);
-    const pct=total===0?100:Math.round((elapsed/total)*1000)/10;
+    const remaining=Math.max(0,total-elapsed)
+    const pct=total===0?100:Math.round((elapsed/total)*1000)/10
 
     function schoolHoursBetween(from,to){
-      if(to<from) return 0;
-
-      let hours=0;
+      if(to<from) return 0
+      let hours=0
       for(let d=new Date(from);d<=to;d.setDate(d.getDate()+1)){
-        if(exclude&&(d.getDay()===0||d.getDay()===6)) continue;
-        if(holidays.has(fmtDate(d))) continue;
-
-        hours += d>=shortDayStart ? 5.5 : 6.5;
+        if(exclude&&(d.getDay()===0||d.getDay()===6)) continue
+        if(holidays.has(fmtDate(d))) continue
+        hours += d>=shortDayStart ? 5.5 : 6.5
       }
-
-      return hours;
+      return hours
     }
 
-    const totalHours=schoolHoursBetween(start,end);
-    const elapsedHours=today<start ? 0 : today>end ? totalHours : schoolHoursBetween(start,today);
-    const remainingHours=Math.max(0,totalHours-elapsedHours);
+    const totalHours=schoolHoursBetween(start,end)
+    const elapsedHours=today<start ? 0 : today>end ? totalHours : schoolHoursBetween(start,today)
+    const remainingHours=Math.max(0,totalHours-elapsedHours)
 
-    els.elapsedHours.textContent=Math.round(elapsedHours*10)/10;
-    els.remainingHours.textContent=Math.round(remainingHours*10)/10;
+    els.elapsedHours.textContent=Math.round(elapsedHours*10)/10
+    els.remainingHours.textContent=Math.round(remainingHours*10)/10
 
-    els.totalDays.textContent=total;
-    els.elapsedDays.textContent=elapsed;
-    els.remainingDays.textContent=remaining;
-    els.percentText.textContent=pct+'%';
-    els.bar.style.width=pct+'%';
+    els.totalDays.textContent=total
+    els.elapsedDays.textContent=elapsed
+    els.remainingDays.textContent=remaining
+    els.percentText.textContent=pct+'%'
+    els.bar.style.width=pct+'%'
 
-    computeTrimestre(today,exclude,holidays);
+    computeTrimestre(today,exclude,holidays)
   }
 
-  compute();
-  els.excludeWeekends.addEventListener('change',compute);
-  els.holidays.addEventListener('input',compute);
+  compute()
+  els.excludeWeekends.addEventListener('change',compute)
+  els.holidays.addEventListener('input',compute)
+  
+  // ================= HORARIO =================
 
-  const horario = {
-    1: [
-      "Biologia",
-      "Proyecto",
-      "Optativa",
-      "Patio",
-      "Castellano",
-      "Mates",
-      "Fisica y Química"
-    ],
-    2: [
-      "Sociales",
-      "Catalan",
-      "Tecnologia",
-      "Patio",
-      "Educacion Fisica",
-      "Mates",
-      "Inglés"
-    ],
-    3: [
-      "Tutoria",
-      "Música",
-      "Inglés",
-      "Patio",
-      "Educacion Fisica",
-      "Proyecto",
-      "Proyecto"
-    ],
-    4: [
-      "Mates",
-      "Sociales",
-      "Optativa",
-      "Patio",
-      "Fisica y Quimica/Biologia",
-      "Biologia/Fisica y Quimica",
-      "Castellano"
-    ],
-    5: [
-      "Sociales",
-      "Musica",
-      "Ingles",
-      "Patio",
-      "Proyecto",
-      "Tutoria",
-      "Catalan"
+// Cambia estas asignaturas por las tuyas
+const horario = {
+  1: [ // Lunes
+    "Biologia",
+    "Proyecto",
+    "Optativa",
+    "Patio",
+    "Castellano",
+    "Mates",
+    "Fisica y Química"
+  ],
+  2: [ // Martes
+    "Sociales",
+    "Catalan",
+    "Tecnologia",
+    "Patio",
+    "Educacion Fisica",
+    "Mates",
+    "Inglés"
+  ],
+  3: [ // Miércoles
+    "Tutoria",
+    "Música",
+    "Inglés",
+    "Patio",
+    "Educacion Fisica",
+    "Proyecto",
+    "Proyecto"
+  ],
+  4: [ // Jueves
+    "Mates",
+    "Sociales",
+    "Optativa",
+    "Patio",
+    "Fisica y Quimica/Biologia",
+    "Biologia/Fisica y Quimica",
+    "Castellano"
+  ],
+  5: [ // Viernes
+    "Sociales",
+    "Musica",
+    "Ingles",
+    "Patio",
+    "Proyecto",
+    "Tutoria",
+    "Catalan"
+  ]
+}
+
+// Horas reales
+const franjas = [
+  {inicio:"08:00", fin:"09:00"},
+  {inicio:"09:00", fin:"10:00"},
+  {inicio:"10:00", fin:"11:00"},
+  {inicio:"11:00", fin:"11:30"}, // patio
+  {inicio:"11:30", fin:"12:30"},
+  {inicio:"12:30", fin:"13:30"},
+  {inicio:"13:30", fin:"14:30"}
+]
+
+const recorteUltimaHoraDesde = parseDate('2026-06-08')
+
+function usarHorarioRecortado(fecha=new Date()){
+  const dia = new Date(fecha)
+  dia.setHours(0,0,0,0)
+  return dia >= recorteUltimaHoraDesde
+}
+
+function franjasDelDia(fecha=new Date()){
+  return usarHorarioRecortado(fecha) ? franjas.slice(0,-1) : franjas
+}
+
+function horaEnMinutos(hora){
+  const [h,m]=hora.split(":").map(Number)
+  return h*60+m
+}
+
+function actualizarHorario(){
+  const ahora = new Date()
+
+  const dia = ahora.getDay() // 0 domingo
+
+  const currentEl = document.getElementById("currentClass")
+  const nextEl = document.getElementById("nextClass")
+
+  // Fin de semana
+  if(dia===0 || dia===6){
+    currentEl.textContent="No hay clase"
+    nextEl.textContent="—"
+    return
+  }
+
+  const minutosActuales = ahora.getHours()*60 + ahora.getMinutes()
+
+  const hoy = horario[dia]
+  const franjasHoy = franjasDelDia(ahora)
+
+  let actual = "Fuera de horario"
+  let siguiente = "—"
+
+  for(let i=0;i<franjasHoy.length;i++){
+
+    const ini = horaEnMinutos(franjasHoy[i].inicio)
+    const fin = horaEnMinutos(franjasHoy[i].fin)
+
+    if(minutosActuales >= ini && minutosActuales < fin){
+
+      actual = hoy[i]
+
+      if(i < franjasHoy.length-1){
+        siguiente = hoy[i+1]
+      }else{
+        siguiente = "Casa"
+      }
+
+      break
+    }
+  }
+
+  currentEl.textContent = actual
+  nextEl.textContent = siguiente
+}
+
+// Mostrar horario completo
+// Mostrar horario desplegable
+document.getElementById("showScheduleBtn").addEventListener("click",()=>{
+
+  const box = document.getElementById("scheduleBox")
+
+  if(box.style.display==="none"){
+
+  document.getElementById("showScheduleBtn").textContent="Cerrar horario"
+    const dias = [
+      "",
+      "Lunes",
+      "Martes",
+      "Miércoles",
+      "Jueves",
+      "Viernes"
     ]
-  };
 
-  const franjas = [
-    {inicio:"08:00", fin:"09:00"},
-    {inicio:"09:00", fin:"10:00"},
-    {inicio:"10:00", fin:"11:00"},
-    {inicio:"11:00", fin:"11:30"},
-    {inicio:"11:30", fin:"12:30"},
-    {inicio:"12:30", fin:"13:30"},
-    {inicio:"13:30", fin:"14:30"}
-  ];
+    let html=""
+    const franjasMostrar = franjasDelDia()
 
-  const recorteUltimaHoraDesde = parseDate('2026-06-08');
+    for(let d=1;d<=5;d++){
 
-  function usarHorarioRecortado(fecha=new Date()){
-    const dia = new Date(fecha);
-    dia.setHours(0,0,0,0);
-    return dia >= recorteUltimaHoraDesde;
-  }
+      html += `
+        <div style="
+          margin-top:12px;
+          background:#1e293b;
+          border-radius:8px;
+          overflow:hidden;
+        ">
 
-  function franjasDelDia(fecha=new Date()){
-    return usarHorarioRecortado(fecha) ? franjas.slice(0,-1) : franjas;
-  }
+          <button onclick="toggleDia(${d})" style="
+            width:100%;
+            text-align:left;
+            padding:12px;
+            border:none;
+            background:#0f172a;
+            color:#22d3ee;
+            font-size:1rem;
+            font-weight:bold;
+            cursor:pointer;
+          ">
+            ${dias[d]}
+          </button>
 
-  function horaEnMinutos(hora){
-    const [h,m]=hora.split(":").map(Number);
-    return h*60+m;
-  }
+          <div id="dia${d}" style="
+            display:none;
+            padding:10px;
+          ">
+      `
 
-  function actualizarHorario(){
-    const ahora = new Date();
-    const dia = ahora.getDay();
-
-    const currentEl = document.getElementById("currentClass");
-    const nextEl = document.getElementById("nextClass");
-
-    if(dia===0 || dia===6){
-      currentEl.textContent="No hay clase";
-      nextEl.textContent="-";
-      return;
-    }
-
-    const minutosActuales = ahora.getHours()*60 + ahora.getMinutes();
-    const hoy = horario[dia];
-    const franjasHoy = franjasDelDia(ahora);
-
-    let actual = "Fuera de horario";
-    let siguiente = "-";
-
-    for(let i=0;i<franjasHoy.length;i++){
-      const ini = horaEnMinutos(franjasHoy[i].inicio);
-      const fin = horaEnMinutos(franjasHoy[i].fin);
-
-      if(minutosActuales >= ini && minutosActuales < fin){
-        actual = hoy[i];
-
-        if(i < franjasHoy.length-1){
-          siguiente = hoy[i+1];
-        }else{
-          siguiente = "Casa";
-        }
-
-        break;
-      }
-    }
-
-    currentEl.textContent = actual;
-    nextEl.textContent = siguiente;
-  }
-
-  document.getElementById("showScheduleBtn").addEventListener("click",()=>{
-    const box = document.getElementById("scheduleBox");
-    const btn = document.getElementById("showScheduleBtn");
-
-    if(box.style.display==="none"){
-      btn.textContent="Cerrar horario";
-
-      const dias = [
-        "",
-        "Lunes",
-        "Martes",
-        "Miércoles",
-        "Jueves",
-        "Viernes"
-      ];
-
-      let html="";
-      const franjasMostrar = franjasDelDia();
-
-      for(let d=1;d<=5;d++){
-        html += `
-          <div style="margin-top:12px;background:#1e293b;border-radius:8px;overflow:hidden;">
-            <button onclick="toggleDia(${d})" style="width:100%;text-align:left;padding:12px;border:none;background:#0f172a;color:#22d3ee;font-size:1rem;font-weight:bold;cursor:pointer;">
-              ${dias[d]}
-            </button>
-
-            <div id="dia${d}" style="display:none;padding:10px;">
-        `;
-
-        for(let i=0;i<franjasMostrar.length;i++){
-          html += `
-            <div style="padding:8px;margin-top:6px;background:#111827;border-radius:6px;">
-              <strong>${franjasMostrar[i].inicio} - ${franjasMostrar[i].fin}</strong>
-              → ${horario[d][i]}
-            </div>
-          `;
-        }
+      for(let i=0;i<franjasMostrar.length;i++){
 
         html += `
-            </div>
+          <div style="
+            padding:8px;
+            margin-top:6px;
+            background:#111827;
+            border-radius:6px;
+          ">
+            <strong>${franjasMostrar[i].inicio} - ${franjasMostrar[i].fin}</strong>
+            → ${horario[d][i]}
           </div>
-        `;
+        `
       }
 
-      box.innerHTML = html;
-      box.style.display="block";
-    }else{
-      box.style.display="none";
-      btn.textContent="Ver horario";
-    }
-  });
-
-  function toggleDia(dia){
-    for(let i=1;i<=5;i++){
-      const otro = document.getElementById("dia"+i);
-
-      if(i!==dia){
-        otro.style.display="none";
-      }
+      html += `
+          </div>
+        </div>
+      `
     }
 
-    const actual = document.getElementById("dia"+dia);
+    box.innerHTML = html
+    box.style.display="block"
 
-    if(actual.style.display==="none"){
-      actual.style.display="block";
-    }else{
-      actual.style.display="none";
+  }else{
+    box.style.display="none"
+  }
+})
+
+// Abrir/cerrar días
+function toggleDia(dia){
+
+  // cerrar todos
+  for(let i=1;i<=5;i++){
+
+    const otro = document.getElementById("dia"+i)
+
+    if(i!==dia){
+      otro.style.display="none"
     }
   }
 
-  actualizarHorario();
-  setInterval(actualizarHorario,60000);
+  // abrir/cerrar el seleccionado
+  const actual = document.getElementById("dia"+dia)
+
+  if(actual.style.display==="none"){
+    actual.style.display="block"
+  }else{
+    actual.style.display="none"
+  }
+}
+
+// Actualizar cada minuto
+actualizarHorario()
+setInterval(actualizarHorario,60000)
 
   function schedule(){
-    const now=new Date();
-    const next=new Date(now);
-    next.setHours(24,0,0,0);
-    setTimeout(()=>{compute();schedule()},next-now+50);
+    const now=new Date()
+    const next=new Date(now)
+    next.setHours(24,0,0,0)
+    setTimeout(()=>{compute();schedule()},next-now+50)
   }
-
-  schedule();
+  schedule()
 </script>
 </body>
 </html>
