@@ -29,37 +29,47 @@
 </head>
 <body>
 
+  <!-- SELECTOR DE IDIOMA -->
+  <div id="langBar" style="position:fixed;top:10px;left:10px;z-index:60;">
+    <select id="langSelect" style="padding:6px 10px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#f1f5f9;font-weight:bold;">
+      <option value="es">🇪🇸 Español</option>
+      <option value="ca">🎗️ Català</option>
+      <option value="en">🇬🇧 English</option>
+      <option value="zh">🇨🇳 简体中文</option>
+    </select>
+  </div>
+
   <!-- LOGIN SIMPLE (solo local, por navegador) -->
   <div id="loginOverlay" style="position:fixed;inset:0;background:#0f1724;display:flex;align-items:center;justify-content:center;z-index:50;padding:20px;">
     <div class="card" style="max-width:360px;">
-      <h1>Identifícate</h1>
-      <p class="small" style="text-align:left;margin-top:0;">Escribe tu nombre. Si es la primera vez, se creará tu perfil en este navegador.</p>
-      <label for="loginUser">Nombre de usuario</label>
+      <h1 id="loginTitleText">Identifícate</h1>
+      <p class="small" id="loginIntroText" style="text-align:left;margin-top:0;">Escribe tu nombre. Si es la primera vez, se creará tu perfil en este navegador.</p>
+      <label for="loginUser" id="loginUserLabelText">Nombre de usuario</label>
       <input id="loginUser" type="text" placeholder="ej: Vicent" autocomplete="off">
-      <label for="loginPin">PIN (opcional, para proteger tu perfil)</label>
+      <label for="loginPin" id="loginPinLabelText">PIN (opcional, para proteger tu perfil)</label>
       <input id="loginPin" type="password" placeholder="opcional" autocomplete="off">
-      <button id="loginBtn" style="margin-top:16px;width:100%;padding:10px;border:none;border-radius:8px;background:#06b6d4;color:white;font-weight:bold;cursor:pointer;">Entrar</button>
+      <button id="loginBtn" style="margin-top:16px;width:100%;padding:10px;border:none;border-radius:8px;background:#06b6d4;color:white;font-weight:bold;cursor:pointer;"><span id="loginBtnText">Entrar</span></button>
       <div id="loginError" class="small" style="color:#f87171;text-align:left;"></div>
-      <div class="small" style="margin-top:14px;">⚠️ Esto no es una cuenta segura ni sincronizada: solo separa los datos de cada persona dentro de este mismo navegador/dispositivo.</div>
+      <div class="small" id="loginWarningText" style="margin-top:14px;">⚠️ Esto no es una cuenta segura ni sincronizada: solo separa los datos de cada persona dentro de este mismo navegador/dispositivo.</div>
     </div>
   </div>
 
   <!-- BARRA DE USUARIO -->
   <div id="userBar" style="display:none;position:fixed;top:10px;right:10px;background:#1e293b;padding:8px 14px;border-radius:999px;font-size:0.85rem;z-index:40;box-shadow:0 4px 10px rgba(0,0,0,0.4);">
     👤 <span id="currentUserName">—</span>
-    <button id="logoutBtn" style="margin-left:10px;border:none;background:#334155;color:#f1f5f9;border-radius:999px;padding:4px 10px;cursor:pointer;">Cambiar</button>
+    <button id="logoutBtn" style="margin-left:10px;border:none;background:#334155;color:#f1f5f9;border-radius:999px;padding:4px 10px;cursor:pointer;"><span id="logoutBtnText">Cambiar</span></button>
   </div>
 
   <div id="appContainer" style="display:none;gap:20px;flex-wrap:wrap;justify-content:center;width:100%;">
   <div class="card contador">
-    <h1>Contador de días de cole</h1>
-    <p>Curso 2026–2027: del <strong>8/09/2026</strong> al <strong>21/06/2027</strong></p>
+    <h1 id="headerTitleText">Contador de días de cole</h1>
+    <p id="courseInfoP">Curso 2026–2027: del <strong>8/09/2026</strong> al <strong>21/06/2027</strong></p>
 
-    <label><input id="excludeWeekends" type="checkbox" checked> Excluir fines de semana</label>
+    <label><input id="excludeWeekends" type="checkbox" checked> <span id="excludeWeekendsLabel">Excluir fines de semana</span></label>
 
-    <label>Festivos</label>
+    <label id="holidaysLabelText">Festivos</label>
     <button id="toggleHolidaysBtn" type="button" style="margin-top:6px;width:100%;padding:10px;border:none;border-radius:8px;background:#334155;color:#f1f5f9;font-weight:bold;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;">
-      <span>📅 Festivos (<span id="holidaysCount">0</span>)</span>
+      <span><span id="holidaysToggleLabel">📅 Festivos</span> (<span id="holidaysCount">0</span>)</span>
       <span id="toggleHolidaysArrow">▼</span>
     </button>
 
@@ -67,52 +77,51 @@
     </div>
 
     <button id="addHolidayBtn" type="button" style="margin-top:10px;width:100%;padding:10px;border:none;border-radius:8px;background:#10b981;color:white;font-weight:bold;cursor:pointer;">
-      + Añadir día de fiesta
+      <span id="addHolidayBtnText">+ Añadir día de fiesta</span>
     </button>
 
     <div id="addHolidayBox" style="display:none;margin-top:10px;">
-      <label for="newHolidayInput">Fecha</label>
+      <label for="newHolidayInput" id="dateLabelText">Fecha</label>
       <input id="newHolidayInput" type="date">
-      <button id="confirmAddHolidayBtn" type="button" style="margin-top:8px;width:100%;padding:8px;border:none;border-radius:8px;background:#06b6d4;color:white;font-weight:bold;cursor:pointer;">Confirmar</button>
+      <button id="confirmAddHolidayBtn" type="button" style="margin-top:8px;width:100%;padding:8px;border:none;border-radius:8px;background:#06b6d4;color:white;font-weight:bold;cursor:pointer;"><span id="confirmAddHolidayBtnText">Confirmar</span></button>
     </div>
 
     <div class="stats">
-      <div class="stat"><div>Días totales</div><div id="totalDays" class="big">—</div></div>
-      <div class="stat"><div>Días transcurridos</div><div id="elapsedDays" class="big">—</div></div>
-      <div class="stat"><div>Días restantes</div><div id="remainingDays" class="big">—</div></div>
-      <div class="stat"><div>Progreso</div><div id="percentText" class="big">—%</div></div>
-      <div class="stat"><div>Horas transcurridas</div><div id="elapsedHours" class="big">—</div></div>
-      <div class="stat"><div>Horas restantes</div><div id="remainingHours" class="big">—</div></div>
+      <div class="stat"><div id="statTotalDaysLabel">Días totales</div><div id="totalDays" class="big">—</div></div>
+      <div class="stat"><div id="statElapsedDaysLabel">Días transcurridos</div><div id="elapsedDays" class="big">—</div></div>
+      <div class="stat"><div id="statRemainingDaysLabel">Días restantes</div><div id="remainingDays" class="big">—</div></div>
+      <div class="stat"><div id="statProgressLabel">Progreso</div><div id="percentText" class="big">—%</div></div>
+      <div class="stat"><div id="statElapsedHoursLabel">Horas transcurridas</div><div id="elapsedHours" class="big">—</div></div>
+      <div class="stat"><div id="statRemainingHoursLabel">Horas restantes</div><div id="remainingHours" class="big">—</div></div>
     </div>
 
     <div class="progress"><div id="bar" class="bar"></div></div>
-    <div class="small">Hoy es <span id="todayDate">—</span></div>
+    <div class="small"><span id="todayIsLabel">Hoy es</span> <span id="todayDate">—</span></div>
 
     <div id="trimestreActual" class="trimestre" style="display:none;">
       <h2 id="triTitle">—</h2>
       <div class="trim-dates" id="triDates">—</div>
       <div class="trim-bar"><div id="triBar" class="trim-bar-inner"></div></div>
-      <div class="trim-info">
-        <span id="triPct">—%</span> completado – 
-        <span id="triRemain">—</span> días restantes
+      <div class="trim-info" id="triInfo">
+        —
       </div>
     </div>
     <div id="afterTris" class="small" style="display:none;margin-top:10px;">
-      Después: recuperaciones y colonias
+      <span id="afterTrisText">Después: recuperaciones y colonias</span>
     </div>
   </div>
   <!-- HORARIO -->
 <div class="card lateral">
 <div class="trimestre" style="margin-top:0;">
-  <h2>Horario actual</h2>
+  <h2 id="scheduleTitleText">Horario actual</h2>
 
   <div class="stat" style="margin-top:15px;">
-    <div>Ahora toca</div>
+    <div id="nowLabelText">Ahora toca</div>
     <div id="currentClass" class="big">—</div>
   </div>
 
   <div class="stat" style="margin-top:15px;">
-    <div>Después toca</div>
+    <div id="nextLabelText">Después toca</div>
     <div id="nextClass" class="big">—</div>
   </div>
 
@@ -126,11 +135,11 @@
     font-weight:bold;
     cursor:pointer;
   ">
-    Ver Horario
+    <span id="showScheduleBtnText">Ver Horario</span>
   </button>
   
   
-  <a href="https://chonni777.github.io/eufrasiojuegos/" class="boton-juegos">Juegos</a>
+  <a href="https://chonni777.github.io/eufrasiojuegos/" class="boton-juegos"><span id="gamesLinkText">Juegos</span></a>
 
 <style>
 .boton-juegos{
@@ -178,7 +187,7 @@ function toggleMenu() {
     font-weight:bold;
     cursor:pointer;
   ">
-    Editar mi horario
+    <span id="editScheduleBtnText">Editar mi horario</span>
   </button>
 
   <div id="editScheduleBox" style="
@@ -206,6 +215,131 @@ function toggleMenu() {
     return new Date(p[0], p[1]-1, p[2]);
   }
 
+  // ================= IDIOMAS =================
+  const translations = {
+    es:{
+      pageTitle:"Contador de días de cole",
+      headerTitle:"Contador de días de cole",
+      courseLabel:"Curso", fromLabel:"del", toLabel:"al",
+      loginTitle:"Identifícate",
+      loginIntro:"Escribe tu nombre. Si es la primera vez, se creará tu perfil en este navegador.",
+      loginUserLabel:"Nombre de usuario",
+      loginPinLabel:"PIN (opcional, para proteger tu perfil)",
+      loginBtn:"Entrar",
+      loginWarning:"⚠️ Esto no es una cuenta segura ni sincronizada: solo separa los datos de cada persona dentro de este mismo navegador/dispositivo.",
+      loginErrorEmpty:"Escribe un nombre de usuario.",
+      loginErrorPin:"PIN incorrecto para ese usuario.",
+      changeUserBtn:"Cambiar",
+      excludeWeekends:"Excluir fines de semana",
+      holidaysLabel:"Festivos", holidaysToggleLabel:"📅 Festivos",
+      noHolidays:"No hay festivos.", removeBtn:"Quitar",
+      addHolidayBtn:"+ Añadir día de fiesta", dateLabel:"Fecha", confirmBtn:"Confirmar",
+      christmasLabel:"Navidad", easterLabel:"Semana Santa",
+      statTotalDays:"Días totales", statElapsedDays:"Días transcurridos", statRemainingDays:"Días restantes",
+      statProgress:"Progreso", statElapsedHours:"Horas transcurridas", statRemainingHours:"Horas restantes",
+      todayIs:"Hoy es", triCompleted:"completado", triRemainingDays:"días restantes",
+      afterTris:"Después: recuperaciones y colonias",
+      trimestreNames:["1er trimestre","2º trimestre","3er trimestre"],
+      scheduleTitle:"Horario actual", nowLabel:"Ahora toca", nextLabel:"Después toca",
+      viewSchedule:"Ver Horario", closeSchedule:"Cerrar horario",
+      editSchedule:"Editar mi horario", closeEdit:"Cerrar edición",
+      saveSchedule:"Guardar mi horario", resetSchedule:"Restaurar horario por defecto",
+      gamesLink:"Juegos", noClass:"No hay clase", outOfSchedule:"Fuera de horario", home:"Casa",
+      dayNames:["","Lunes","Martes","Miércoles","Jueves","Viernes"]
+    },
+    ca:{
+      pageTitle:"Comptador de dies de colegi",
+      headerTitle:"Comptador de dies de colegi",
+      courseLabel:"Curs", fromLabel:"del", toLabel:"al",
+      loginTitle:"Identifica't",
+      loginIntro:"Escriu el teu nom. Si és el primer cop, es crearà el teu perfil en aquest navegador.",
+      loginUserLabel:"Nom d'usuari",
+      loginPinLabel:"PIN (opcional, per protegir el teu perfil)",
+      loginBtn:"Entrar",
+      loginWarning:"⚠️ Això no és un compte segur ni sincronitzat: només separa les dades de cada persona dins d'aquest mateix navegador/dispositiu.",
+      loginErrorEmpty:"Escriu un nom d'usuari.",
+      loginErrorPin:"PIN incorrecte per a aquest usuari.",
+      changeUserBtn:"Canviar",
+      excludeWeekends:"Excloure caps de setmana",
+      holidaysLabel:"Festius", holidaysToggleLabel:"📅 Festius",
+      noHolidays:"No hi ha festius.", removeBtn:"Treure",
+      addHolidayBtn:"+ Afegir dia de festa", dateLabel:"Data", confirmBtn:"Confirmar",
+      christmasLabel:"Nadal", easterLabel:"Setmana Santa",
+      statTotalDays:"Dies totals", statElapsedDays:"Dies transcorreguts", statRemainingDays:"Dies restants",
+      statProgress:"Progrés", statElapsedHours:"Hores transcorregudes", statRemainingHours:"Hores restants",
+      todayIs:"Avui és", triCompleted:"completat", triRemainingDays:"dies restants",
+      afterTris:"Després: recuperacions i colònies",
+      trimestreNames:["1r trimestre","2n trimestre","3r trimestre"],
+      scheduleTitle:"Horari actual", nowLabel:"Ara toca", nextLabel:"Després toca",
+      viewSchedule:"Veure horari", closeSchedule:"Tancar horari",
+      editSchedule:"Editar el meu horari", closeEdit:"Tancar edició",
+      saveSchedule:"Desar el meu horari", resetSchedule:"Restaurar horari per defecte",
+      gamesLink:"Jocs", noClass:"No hi ha classe", outOfSchedule:"Fora d'horari", home:"Casa",
+      dayNames:["","Dilluns","Dimarts","Dimecres","Dijous","Divendres"]
+    },
+    en:{
+      pageTitle:"School days counter",
+      headerTitle:"School days counter",
+      courseLabel:"School year", fromLabel:"from", toLabel:"to",
+      loginTitle:"Sign in",
+      loginIntro:"Enter your name. If it's your first time, your profile will be created in this browser.",
+      loginUserLabel:"Username",
+      loginPinLabel:"PIN (optional, to protect your profile)",
+      loginBtn:"Enter",
+      loginWarning:"⚠️ This is not a secure or synced account: it just keeps each person's data separate within this same browser/device.",
+      loginErrorEmpty:"Enter a username.",
+      loginErrorPin:"Incorrect PIN for that user.",
+      changeUserBtn:"Switch",
+      excludeWeekends:"Exclude weekends",
+      holidaysLabel:"Holidays", holidaysToggleLabel:"📅 Holidays",
+      noHolidays:"No holidays.", removeBtn:"Remove",
+      addHolidayBtn:"+ Add holiday", dateLabel:"Date", confirmBtn:"Confirm",
+      christmasLabel:"Christmas", easterLabel:"Easter",
+      statTotalDays:"Total days", statElapsedDays:"Days elapsed", statRemainingDays:"Days remaining",
+      statProgress:"Progress", statElapsedHours:"Hours elapsed", statRemainingHours:"Hours remaining",
+      todayIs:"Today is", triCompleted:"completed", triRemainingDays:"days remaining",
+      afterTris:"Afterwards: catch-up days and summer camp",
+      trimestreNames:["1st term","2nd term","3rd term"],
+      scheduleTitle:"Current schedule", nowLabel:"Now", nextLabel:"Next",
+      viewSchedule:"View schedule", closeSchedule:"Close schedule",
+      editSchedule:"Edit my schedule", closeEdit:"Close editor",
+      saveSchedule:"Save my schedule", resetSchedule:"Restore default schedule",
+      gamesLink:"Games", noClass:"No class", outOfSchedule:"Out of schedule", home:"Home",
+      dayNames:["","Monday","Tuesday","Wednesday","Thursday","Friday"]
+    },
+    zh:{
+      pageTitle:"天数与时间计数器",
+      headerTitle:"天数计数器",
+      courseLabel:"学年", fromLabel:"从", toLabel:"到",
+      loginTitle:"登录",
+      loginIntro:"请输入你的名字。如果是第一次使用，将在此浏览器中创建你的个人资料。",
+      loginUserLabel:"用户名",
+      loginPinLabel:"PIN码（可选，用于保护你的资料）",
+      loginBtn:"进入",
+      loginWarning:"⚠️ 这不是一个安全或同步的账户：它只是在同一浏览器/设备内区分每个人的数据。",
+      loginErrorEmpty:"请输入用户名。",
+      loginErrorPin:"该用户的PIN码不正确。",
+      changeUserBtn:"切换",
+      excludeWeekends:"排除周末",
+      holidaysLabel:"假期", holidaysToggleLabel:"📅 假期",
+      noHolidays:"没有假期。", removeBtn:"删除",
+      addHolidayBtn:"+ 添加假期", dateLabel:"日期", confirmBtn:"确认",
+      christmasLabel:"圣诞节", easterLabel:"复活节",
+      statTotalDays:"总天数", statElapsedDays:"已过天数", statRemainingDays:"剩余天数",
+      statProgress:"进度", statElapsedHours:"已过小时数", statRemainingHours:"剩余小时数",
+      todayIs:"今天是", triCompleted:"已完成", triRemainingDays:"剩余天数",
+      afterTris:"之后：补课和夏令营",
+      trimestreNames:["第一学期","第二学期","第三学期"],
+      scheduleTitle:"当前课表", nowLabel:"现在", nextLabel:"下一节",
+      viewSchedule:"查看课表", closeSchedule:"关闭课表",
+      editSchedule:"编辑我的课表", closeEdit:"关闭编辑",
+      saveSchedule:"保存我的课表", resetSchedule:"恢复默认课表",
+      gamesLink:"游戏", noClass:"没有课", outOfSchedule:"不在课表时间内", home:"回家",
+      dayNames:["","星期一","星期二","星期三","星期四","星期五"]
+    }
+  }
+  let currentLang = localStorage.getItem('contador_lang') || 'es'
+
   function eachDayCount(start,end,excludeWeekends,holidaysSet){
     let cnt=0
     for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
@@ -230,8 +364,7 @@ function toggleMenu() {
     triTitle:document.getElementById('triTitle'),
     triDates:document.getElementById('triDates'),
     triBar:document.getElementById('triBar'),
-    triPct:document.getElementById('triPct'),
-    triRemain:document.getElementById('triRemain'),
+    triInfo:document.getElementById('triInfo'),
     afterTris:document.getElementById('afterTris')
   }
 
@@ -250,25 +383,27 @@ function toggleMenu() {
   // El resto de festivos (Diada, locales, lliure disposició, etc.) los añade cada usuario en el cuadro de texto y se guardan solo para él.
 
   // ⚠️ Fechas de trimestre estimadas (mismo patrón que el curso 2025-26, +1 año). El centro aún no ha publicado las oficiales de 2026-27: ajústalas cuando las tengas.
+  // El nombre de cada trimestre se traduce (ver translations.trimestreNames), por eso aquí solo hay fechas.
   const trimestres=[
-    {nombre:"1r trimestre",start:parseDate('2026-09-08'),end:parseDate('2026-11-28')},
-    {nombre:"2n trimestre",start:parseDate('2026-12-01'),end:parseDate('2027-03-06')},
-    {nombre:"3r trimestre",start:parseDate('2027-03-09'),end:parseDate('2027-06-05')}
+    {start:parseDate('2026-09-08'),end:parseDate('2026-11-28')},
+    {start:parseDate('2026-12-01'),end:parseDate('2027-03-06')},
+    {start:parseDate('2027-03-09'),end:parseDate('2027-06-05')}
   ]
 
   function computeTrimestre(today,exclude,holidays){
+    const tr=translations[currentLang]
     els.triBox.style.display="none"
     els.afterTris.style.display="none"
-    for(const tri of trimestres){
+    for(let idx=0;idx<trimestres.length;idx++){
+      const tri=trimestres[idx]
       if(today>=tri.start && today<=tri.end){
         const total=eachDayCount(tri.start,tri.end,exclude,holidays)
         const elapsed=eachDayCount(tri.start,today,exclude,holidays)
         const remaining=Math.max(0,total-elapsed)
         const pct=total===0?100:Math.round((elapsed/total)*1000)/10
-        els.triTitle.textContent=tri.nombre
+        els.triTitle.textContent=tr.trimestreNames[idx]
         els.triDates.textContent=`${fmtDate(tri.start)} – ${fmtDate(tri.end)}`
-        els.triPct.textContent=pct+"%"
-        els.triRemain.textContent=remaining
+        els.triInfo.innerHTML=`${pct}% ${tr.triCompleted} – ${remaining} ${tr.triRemainingDays}`
         els.triBar.style.width=pct+"%"
         els.triBox.style.display="block"
         return
@@ -406,6 +541,7 @@ function horaEnMinutos(hora){
 
 function actualizarHorario(){
   const ahora = new Date()
+  const tr = translations[currentLang]
 
   const dia = ahora.getDay() // 0 domingo
 
@@ -414,7 +550,7 @@ function actualizarHorario(){
 
   // Fin de semana
   if(dia===0 || dia===6){
-    currentEl.textContent="No hay clase"
+    currentEl.textContent=tr.noClass
     nextEl.textContent="—"
     return
   }
@@ -424,7 +560,7 @@ function actualizarHorario(){
   const hoy = horario[dia]
   const franjasHoy = franjasDelDia(ahora)
 
-  let actual = "Fuera de horario"
+  let actual = tr.outOfSchedule
   let siguiente = "—"
 
   for(let i=0;i<franjasHoy.length;i++){
@@ -439,7 +575,7 @@ function actualizarHorario(){
       if(i < franjasHoy.length-1){
         siguiente = hoy[i+1]
       }else{
-        siguiente = "Casa"
+        siguiente = tr.home
       }
 
       break
@@ -452,80 +588,82 @@ function actualizarHorario(){
 
 // Mostrar horario completo
 // Mostrar horario desplegable
-document.getElementById("showScheduleBtn").addEventListener("click",()=>{
+const showScheduleBtnTextEl = document.getElementById('showScheduleBtnText')
 
+function renderScheduleBox(){
+  const tr = translations[currentLang]
   const box = document.getElementById("scheduleBox")
+  const dias = tr.dayNames
 
-  if(box.style.display==="none"){
+  let html=""
+  const franjasMostrar = franjasDelDia()
 
-  document.getElementById("showScheduleBtn").textContent="Cerrar horario"
-    const dias = [
-      "",
-      "Lunes",
-      "Martes",
-      "Miércoles",
-      "Jueves",
-      "Viernes"
-    ]
+  for(let d=1;d<=5;d++){
 
-    let html=""
-    const franjasMostrar = franjasDelDia()
+    html += `
+      <div style="
+        margin-top:12px;
+        background:#1e293b;
+        border-radius:8px;
+        overflow:hidden;
+      ">
 
-    for(let d=1;d<=5;d++){
+        <button onclick="toggleDia(${d})" style="
+          width:100%;
+          text-align:left;
+          padding:12px;
+          border:none;
+          background:#0f172a;
+          color:#22d3ee;
+          font-size:1rem;
+          font-weight:bold;
+          cursor:pointer;
+        ">
+          ${dias[d]}
+        </button>
+
+        <div id="dia${d}" style="
+          display:none;
+          padding:10px;
+        ">
+    `
+
+    for(let i=0;i<franjasMostrar.length;i++){
 
       html += `
         <div style="
-          margin-top:12px;
-          background:#1e293b;
-          border-radius:8px;
-          overflow:hidden;
+          padding:8px;
+          margin-top:6px;
+          background:#111827;
+          border-radius:6px;
         ">
-
-          <button onclick="toggleDia(${d})" style="
-            width:100%;
-            text-align:left;
-            padding:12px;
-            border:none;
-            background:#0f172a;
-            color:#22d3ee;
-            font-size:1rem;
-            font-weight:bold;
-            cursor:pointer;
-          ">
-            ${dias[d]}
-          </button>
-
-          <div id="dia${d}" style="
-            display:none;
-            padding:10px;
-          ">
-      `
-
-      for(let i=0;i<franjasMostrar.length;i++){
-
-        html += `
-          <div style="
-            padding:8px;
-            margin-top:6px;
-            background:#111827;
-            border-radius:6px;
-          ">
-            <strong>${franjasMostrar[i].inicio} - ${franjasMostrar[i].fin}</strong>
-            → ${horario[d][i]}
-          </div>
-        `
-      }
-
-      html += `
-          </div>
+          <strong>${franjasMostrar[i].inicio} - ${franjasMostrar[i].fin}</strong>
+          → ${horario[d][i]}
         </div>
       `
     }
 
-    box.innerHTML = html
+    html += `
+        </div>
+      </div>
+    `
+  }
+
+  box.innerHTML = html
+}
+
+document.getElementById("showScheduleBtn").addEventListener("click",()=>{
+
+  const box = document.getElementById("scheduleBox")
+  const tr = translations[currentLang]
+
+  if(box.style.display==="none"){
+    showScheduleBtnTextEl.textContent = tr.closeSchedule
+    renderScheduleBox()
     box.style.display="block"
 
   }else{
+    showScheduleBtnTextEl.textContent = tr.viewSchedule
     box.style.display="none"
   }
 })
@@ -610,10 +748,11 @@ setInterval(actualizarHorario,60000)
   function doLogin(){
     const name=loginUserInput.value.trim()
     const pin=loginPinInput.value
-    if(!name){ loginError.textContent='Escribe un nombre de usuario.'; return }
+    const tr=translations[currentLang]
+    if(!name){ loginError.textContent=tr.loginErrorEmpty; return }
     const users=getUsers()
     if(Object.prototype.hasOwnProperty.call(users,name)){
-      if((users[name]||'')!==pin){ loginError.textContent='PIN incorrecto para ese usuario.'; return }
+      if((users[name]||'')!==pin){ loginError.textContent=tr.loginErrorPin; return }
     }else{
       users[name]=pin
       saveUsers(users)
@@ -664,21 +803,22 @@ setInterval(actualizarHorario,60000)
   const confirmAddHolidayBtn=document.getElementById('confirmAddHolidayBtn')
 
   function renderHolidaysList(){
+    const tr=translations[currentLang]
     const sorted=[...holidaysList].sort()
     holidaysCountEl.textContent=sorted.length
     if(sorted.length===0){
-      holidaysListBox.innerHTML='<div class="small">No hay festivos.</div>'
+      holidaysListBox.innerHTML=`<div class="small">${tr.noHolidays}</div>`
       return
     }
     holidaysListBox.innerHTML=sorted.map(d=>{
       const esBase=baseHolidays.includes(d)
       let etiqueta=''
-      if(christmasHolidays.includes(d)) etiqueta='Navidad'
-      else if(easterHolidays.includes(d)) etiqueta='Semana Santa'
+      if(christmasHolidays.includes(d)) etiqueta=tr.christmasLabel
+      else if(easterHolidays.includes(d)) etiqueta=tr.easterLabel
       return `
         <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 4px;border-bottom:1px solid #1e293b;">
           <span>${d}${etiqueta?' <span class="small" style="display:inline;color:#64748b;">('+etiqueta+')</span>':''}</span>
-          ${esBase?'':'<button data-date="'+d+'" class="removeHolidayBtn" style="border:none;background:#ef4444;color:white;border-radius:6px;padding:2px 8px;cursor:pointer;">Quitar</button>'}
+          ${esBase?'':'<button data-date="'+d+'" class="removeHolidayBtn" style="border:none;background:#ef4444;color:white;border-radius:6px;padding:2px 8px;cursor:pointer;">'+tr.removeBtn+'</button>'}
         </div>
       `
     }).join('')
@@ -731,14 +871,15 @@ setInterval(actualizarHorario,60000)
     saveUserData(currentUser,data)
   }
 
-  if(currentUser){ showApp() } else { showLogin() }
+  // (el login se arranca al final del script, tras configurar los idiomas)
 
   // ================= EDITAR HORARIO =================
   const editScheduleBtn=document.getElementById('editScheduleBtn')
   const editScheduleBox=document.getElementById('editScheduleBox')
 
   function buildEditForm(){
-    const dias=['','Lunes','Martes','Miércoles','Jueves','Viernes']
+    const tr=translations[currentLang]
+    const dias=tr.dayNames
     let html=''
     for(let d=1;d<=5;d++){
       html+=`<div style="margin-top:10px;"><strong style="color:#22d3ee;">${dias[d]}</strong>`
@@ -753,8 +894,8 @@ setInterval(actualizarHorario,60000)
       html+='</div>'
     }
     html+=`
-      <button id="saveScheduleBtn" style="margin-top:14px;width:100%;padding:10px;border:none;border-radius:8px;background:#10b981;color:white;font-weight:bold;cursor:pointer;">Guardar mi horario</button>
-      <button id="resetScheduleBtn" style="margin-top:8px;width:100%;padding:8px;border:none;border-radius:8px;background:#334155;color:#f1f5f9;cursor:pointer;">Restaurar horario por defecto</button>
+      <button id="saveScheduleBtn" style="margin-top:14px;width:100%;padding:10px;border:none;border-radius:8px;background:#10b981;color:white;font-weight:bold;cursor:pointer;">${tr.saveSchedule}</button>
+      <button id="resetScheduleBtn" style="margin-top:8px;width:100%;padding:8px;border:none;border-radius:8px;background:#334155;color:#f1f5f9;cursor:pointer;">${tr.resetSchedule}</button>
     `
     editScheduleBox.innerHTML=html
     document.getElementById('saveScheduleBtn').addEventListener('click',saveScheduleFromForm)
@@ -767,6 +908,7 @@ setInterval(actualizarHorario,60000)
   }
 
   function saveScheduleFromForm(){
+    const tr=translations[currentLang]
     const inputs=editScheduleBox.querySelectorAll('.horarioInput')
     const nuevo={1:[],2:[],3:[],4:[],5:[]}
     inputs.forEach(inp=>{
@@ -778,19 +920,79 @@ setInterval(actualizarHorario,60000)
     saveHorarioForUser()
     actualizarHorario()
     editScheduleBox.style.display='none'
-    editScheduleBtn.textContent='Editar mi horario'
+    document.getElementById('editScheduleBtnText').textContent=tr.editSchedule
   }
 
   editScheduleBtn.addEventListener('click',()=>{
+    const tr=translations[currentLang]
     if(editScheduleBox.style.display==='none'){
       buildEditForm()
       editScheduleBox.style.display='block'
-      editScheduleBtn.textContent='Cerrar edición'
+      document.getElementById('editScheduleBtnText').textContent=tr.closeEdit
     }else{
       editScheduleBox.style.display='none'
-      editScheduleBtn.textContent='Editar mi horario'
+      document.getElementById('editScheduleBtnText').textContent=tr.editSchedule
     }
   })
+
+  // ================= APLICAR IDIOMA =================
+  const langSelect=document.getElementById('langSelect')
+  langSelect.value=currentLang
+
+  function applyStaticTexts(){
+    const tr=translations[currentLang]
+    document.title=tr.pageTitle
+    document.getElementById('loginTitleText').textContent=tr.loginTitle
+    document.getElementById('loginIntroText').textContent=tr.loginIntro
+    document.getElementById('loginUserLabelText').textContent=tr.loginUserLabel
+    document.getElementById('loginPinLabelText').textContent=tr.loginPinLabel
+    document.getElementById('loginBtnText').textContent=tr.loginBtn
+    document.getElementById('loginWarningText').textContent=tr.loginWarning
+    document.getElementById('logoutBtnText').textContent=tr.changeUserBtn
+    document.getElementById('headerTitleText').textContent=tr.headerTitle
+    document.getElementById('courseInfoP').innerHTML=`${tr.courseLabel} 2026–2027: ${tr.fromLabel} <strong>8/09/2026</strong> ${tr.toLabel} <strong>21/06/2027</strong>`
+    document.getElementById('excludeWeekendsLabel').textContent=tr.excludeWeekends
+    document.getElementById('holidaysLabelText').textContent=tr.holidaysLabel
+    document.getElementById('holidaysToggleLabel').textContent=tr.holidaysToggleLabel
+    document.getElementById('addHolidayBtnText').textContent=tr.addHolidayBtn
+    document.getElementById('dateLabelText').textContent=tr.dateLabel
+    document.getElementById('confirmAddHolidayBtnText').textContent=tr.confirmBtn
+    document.getElementById('statTotalDaysLabel').textContent=tr.statTotalDays
+    document.getElementById('statElapsedDaysLabel').textContent=tr.statElapsedDays
+    document.getElementById('statRemainingDaysLabel').textContent=tr.statRemainingDays
+    document.getElementById('statProgressLabel').textContent=tr.statProgress
+    document.getElementById('statElapsedHoursLabel').textContent=tr.statElapsedHours
+    document.getElementById('statRemainingHoursLabel').textContent=tr.statRemainingHours
+    document.getElementById('todayIsLabel').textContent=tr.todayIs
+    document.getElementById('afterTrisText').textContent=tr.afterTris
+    document.getElementById('scheduleTitleText').textContent=tr.scheduleTitle
+    document.getElementById('nowLabelText').textContent=tr.nowLabel
+    document.getElementById('nextLabelText').textContent=tr.nextLabel
+    document.getElementById('gamesLinkText').textContent=tr.gamesLink
+
+    const scheduleBoxEl=document.getElementById('scheduleBox')
+    showScheduleBtnTextEl.textContent = scheduleBoxEl.style.display==='none' ? tr.viewSchedule : tr.closeSchedule
+    const editScheduleBoxEl=document.getElementById('editScheduleBox')
+    document.getElementById('editScheduleBtnText').textContent = editScheduleBoxEl.style.display==='none' ? tr.editSchedule : tr.closeEdit
+  }
+
+  function applyLanguage(lang){
+    currentLang=lang
+    localStorage.setItem('contador_lang',lang)
+    applyStaticTexts()
+    renderHolidaysList()
+    compute()
+    actualizarHorario()
+    const scheduleBoxEl=document.getElementById('scheduleBox')
+    if(scheduleBoxEl.style.display==='block'){ renderScheduleBox() }
+    const editScheduleBoxEl=document.getElementById('editScheduleBox')
+    if(editScheduleBoxEl.style.display==='block'){ buildEditForm() }
+  }
+
+  langSelect.addEventListener('change',()=>{ applyLanguage(langSelect.value) })
+
+  applyStaticTexts()
+  if(currentUser){ showApp() } else { showLogin() }
 </script>
 </body>
 </html>
