@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Contador de días de cole</title>
+  <title>Contador de días y horas – Vicent Plantada</title>
   <link rel="icon" type="image/png" href="logo.png">
   <style>
     body{font-family:Arial,Helvetica,sans-serif;background:#0f1724;color:#f1f5f9;margin:0;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:20px;gap:20px;flex-wrap:wrap}
@@ -62,7 +62,7 @@
 
   <div id="appContainer" style="display:none;gap:20px;flex-wrap:wrap;justify-content:center;width:100%;">
   <div class="card contador">
-    <h1 id="headerTitleText">Contador de días de cole</h1>
+    <h1 id="headerTitleText">Contador de días – Vicent Plantada (Mollet)</h1>
     <p id="courseInfoP">Curso 2026–2027: del <strong>8/09/2026</strong> al <strong>21/06/2027</strong></p>
 
     <label><input id="excludeWeekends" type="checkbox" checked> <span id="excludeWeekendsLabel">Excluir fines de semana</span></label>
@@ -199,6 +199,53 @@ function toggleMenu() {
     border-radius:10px;
   ">
   </div>
+
+  <button id="shareBtn" type="button" style="
+    margin-top:20px;
+    width:100%;
+    padding:10px 16px;
+    border:none;
+    border-radius:8px;
+    background:#8b5cf6;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+  ">
+    <span id="shareBtnText">🔗 Compartir horario y festivos</span>
+  </button>
+
+  <div id="shareBox" style="display:none;margin-top:15px;text-align:left;background:#111827;padding:15px;border-radius:10px;">
+    <p class="small" id="shareIntroText" style="text-align:left;margin-top:0;">Comparte este código o enlace: quien lo abra podrá importar tus mismos festivos y horario.</p>
+    <label id="shareCodeLabelText" for="shareCodeOutput">Código</label>
+    <textarea id="shareCodeOutput" rows="3" readonly style="font-size:0.7rem;"></textarea>
+    <button id="copyCodeBtn" type="button" style="margin-top:8px;width:100%;padding:8px;border:none;border-radius:8px;background:#334155;color:#f1f5f9;cursor:pointer;"><span id="copyCodeBtnText">Copiar código</span></button>
+
+    <label id="shareLinkLabelText" for="shareLinkOutput" style="margin-top:14px;">Enlace</label>
+    <input id="shareLinkOutput" readonly>
+    <button id="copyLinkBtn" type="button" style="margin-top:8px;width:100%;padding:8px;border:none;border-radius:8px;background:#334155;color:#f1f5f9;cursor:pointer;"><span id="copyLinkBtnText">Copiar enlace</span></button>
+    <div id="shareCopiedMsg" class="small" style="display:none;color:#10b981;"></div>
+  </div>
+
+  <button id="importToggleBtn" type="button" style="
+    margin-top:12px;
+    width:100%;
+    padding:10px 16px;
+    border:none;
+    border-radius:8px;
+    background:#334155;
+    color:#f1f5f9;
+    font-weight:bold;
+    cursor:pointer;
+  ">
+    <span id="importToggleBtnText">📥 Importar código</span>
+  </button>
+
+  <div id="importBox" style="display:none;margin-top:15px;text-align:left;background:#111827;padding:15px;border-radius:10px;">
+    <label id="importLabelText" for="importCodeInput">Pega aquí el código</label>
+    <textarea id="importCodeInput" rows="3"></textarea>
+    <button id="importConfirmBtn" type="button" style="margin-top:8px;width:100%;padding:8px;border:none;border-radius:8px;background:#10b981;color:white;font-weight:bold;cursor:pointer;"><span id="importConfirmBtnText">Importar</span></button>
+    <div id="importMsg" class="small"></div>
+  </div>
 </div>
 </div>
 </div>
@@ -218,8 +265,8 @@ function toggleMenu() {
   // ================= IDIOMAS =================
   const translations = {
     es:{
-      pageTitle:"Contador de días de cole",
-      headerTitle:"Contador de días de cole",
+      pageTitle:"Contador de días y horas – Vicent Plantada",
+      headerTitle:"Contador de días – Vicent Plantada (Mollet)",
       courseLabel:"Curso", fromLabel:"del", toLabel:"al",
       loginTitle:"Identifícate",
       loginIntro:"Escribe tu nombre. Si es la primera vez, se creará tu perfil en este navegador.",
@@ -245,11 +292,18 @@ function toggleMenu() {
       editSchedule:"Editar mi horario", closeEdit:"Cerrar edición",
       saveSchedule:"Guardar mi horario", resetSchedule:"Restaurar horario por defecto",
       gamesLink:"Juegos", noClass:"No hay clase", outOfSchedule:"Fuera de horario", home:"Casa",
-      dayNames:["","Lunes","Martes","Miércoles","Jueves","Viernes"]
+      dayNames:["","Lunes","Martes","Miércoles","Jueves","Viernes"],
+      shareBtn:"🔗 Compartir horario y festivos",
+      shareIntro:"Comparte este código o enlace: quien lo abra podrá importar tus mismos festivos y horario.",
+      shareCodeLabel:"Código", copyCode:"Copiar código", copied:"¡Copiado!",
+      shareLinkLabel:"Enlace", copyLink:"Copiar enlace",
+      importToggle:"📥 Importar código", importLabel:"Pega aquí el código", importBtn:"Importar",
+      importConfirmPrompt:"Se ha detectado un horario compartido para importar. Esto reemplazará tus festivos y horario actuales. ¿Quieres continuar?",
+      importSuccess:"¡Importado correctamente!", importError:"El código no es válido."
     },
     ca:{
-      pageTitle:"Comptador de dies de colegi",
-      headerTitle:"Comptador de dies de colegi",
+      pageTitle:"Comptador de dies i hores – Vicent Plantada",
+      headerTitle:"Comptador de dies – Vicent Plantada (Mollet)",
       courseLabel:"Curs", fromLabel:"del", toLabel:"al",
       loginTitle:"Identifica't",
       loginIntro:"Escriu el teu nom. Si és el primer cop, es crearà el teu perfil en aquest navegador.",
@@ -275,11 +329,18 @@ function toggleMenu() {
       editSchedule:"Editar el meu horari", closeEdit:"Tancar edició",
       saveSchedule:"Desar el meu horari", resetSchedule:"Restaurar horari per defecte",
       gamesLink:"Jocs", noClass:"No hi ha classe", outOfSchedule:"Fora d'horari", home:"Casa",
-      dayNames:["","Dilluns","Dimarts","Dimecres","Dijous","Divendres"]
+      dayNames:["","Dilluns","Dimarts","Dimecres","Dijous","Divendres"],
+      shareBtn:"🔗 Compartir horari i festius",
+      shareIntro:"Comparteix aquest codi o enllaç: qui l'obri podrà importar els teus mateixos festius i horari.",
+      shareCodeLabel:"Codi", copyCode:"Copiar codi", copied:"Copiat!",
+      shareLinkLabel:"Enllaç", copyLink:"Copiar enllaç",
+      importToggle:"📥 Importar codi", importLabel:"Enganxa aquí el codi", importBtn:"Importar",
+      importConfirmPrompt:"S'ha detectat un horari compartit per importar. Això reemplaçarà els teus festius i horari actuals. Vols continuar?",
+      importSuccess:"Importat correctament!", importError:"El codi no és vàlid."
     },
     en:{
-      pageTitle:"School days counter",
-      headerTitle:"School days counter",
+      pageTitle:"Days & Hours Counter – Vicent Plantada",
+      headerTitle:"Days Counter – Vicent Plantada (Mollet)",
       courseLabel:"School year", fromLabel:"from", toLabel:"to",
       loginTitle:"Sign in",
       loginIntro:"Enter your name. If it's your first time, your profile will be created in this browser.",
@@ -305,11 +366,18 @@ function toggleMenu() {
       editSchedule:"Edit my schedule", closeEdit:"Close editor",
       saveSchedule:"Save my schedule", resetSchedule:"Restore default schedule",
       gamesLink:"Games", noClass:"No class", outOfSchedule:"Out of schedule", home:"Home",
-      dayNames:["","Monday","Tuesday","Wednesday","Thursday","Friday"]
+      dayNames:["","Monday","Tuesday","Wednesday","Thursday","Friday"],
+      shareBtn:"🔗 Share schedule & holidays",
+      shareIntro:"Share this code or link: whoever opens it can import your holidays and schedule.",
+      shareCodeLabel:"Code", copyCode:"Copy code", copied:"Copied!",
+      shareLinkLabel:"Link", copyLink:"Copy link",
+      importToggle:"📥 Import code", importLabel:"Paste the code here", importBtn:"Import",
+      importConfirmPrompt:"A shared schedule was detected. This will replace your current holidays and schedule. Continue?",
+      importSuccess:"Imported successfully!", importError:"That code isn't valid."
     },
     zh:{
-      pageTitle:"天数与时间计数器",
-      headerTitle:"天数计数器",
+      pageTitle:"天数与时间计数器 – Vicent Plantada",
+      headerTitle:"天数计数器 – Vicent Plantada (Mollet)",
       courseLabel:"学年", fromLabel:"从", toLabel:"到",
       loginTitle:"登录",
       loginIntro:"请输入你的名字。如果是第一次使用，将在此浏览器中创建你的个人资料。",
@@ -335,7 +403,14 @@ function toggleMenu() {
       editSchedule:"编辑我的课表", closeEdit:"关闭编辑",
       saveSchedule:"保存我的课表", resetSchedule:"恢复默认课表",
       gamesLink:"游戏", noClass:"没有课", outOfSchedule:"不在课表时间内", home:"回家",
-      dayNames:["","星期一","星期二","星期三","星期四","星期五"]
+      dayNames:["","星期一","星期二","星期三","星期四","星期五"],
+      shareBtn:"🔗 分享课表和假期",
+      shareIntro:"分享这个代码或链接：打开它的人可以导入你的假期和课表。",
+      shareCodeLabel:"代码", copyCode:"复制代码", copied:"已复制！",
+      shareLinkLabel:"链接", copyLink:"复制链接",
+      importToggle:"📥 导入代码", importLabel:"在此粘贴代码", importBtn:"导入",
+      importConfirmPrompt:"检测到一个共享的课表。这将替换你当前的假期和课表。要继续吗？",
+      importSuccess:"导入成功！", importError:"该代码无效。"
     }
   }
   let currentLang = localStorage.getItem('contador_lang') || 'es'
@@ -735,6 +810,7 @@ setInterval(actualizarHorario,60000)
     userBar.style.display='block'
     currentUserName.textContent=currentUser
     loadUserIntoApp()
+    checkPendingImport()
   }
   function showLogin(){
     appContainer.style.display='none'
@@ -829,6 +905,7 @@ setInterval(actualizarHorario,60000)
         renderHolidaysList()
         compute()
         saveCurrentHolidaysForUser()
+        refreshShareIfOpen()
       })
     })
   }
@@ -853,6 +930,7 @@ setInterval(actualizarHorario,60000)
       renderHolidaysList()
       compute()
       saveCurrentHolidaysForUser()
+      refreshShareIfOpen()
       // Mostrar la lista automáticamente para ver el día añadido
       holidaysListBox.style.display='block'
       toggleHolidaysArrow.textContent='▲'
@@ -904,6 +982,7 @@ setInterval(actualizarHorario,60000)
       saveHorarioForUser()
       buildEditForm()
       actualizarHorario()
+      refreshShareIfOpen()
     })
   }
 
@@ -921,6 +1000,7 @@ setInterval(actualizarHorario,60000)
     actualizarHorario()
     editScheduleBox.style.display='none'
     document.getElementById('editScheduleBtnText').textContent=tr.editSchedule
+    refreshShareIfOpen()
   }
 
   editScheduleBtn.addEventListener('click',()=>{
@@ -934,6 +1014,142 @@ setInterval(actualizarHorario,60000)
       document.getElementById('editScheduleBtnText').textContent=tr.editSchedule
     }
   })
+
+  // ================= COMPARTIR / IMPORTAR =================
+  function utf8ToB64(str){
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,(m,p1)=>String.fromCharCode('0x'+p1)))
+  }
+  function b64ToUtf8(str){
+    return decodeURIComponent(Array.prototype.map.call(atob(str),c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join(''))
+  }
+
+  function buildShareCode(){
+    const extra=holidaysList.filter(d=>!baseHolidays.includes(d))
+    const payload={holidays:extra,horario:horario}
+    return utf8ToB64(JSON.stringify(payload))
+  }
+
+  function buildShareLink(code){
+    const url=new URL(window.location.href)
+    url.hash='import='+code
+    return url.toString()
+  }
+
+  function decodeShareCode(code){
+    try{
+      const payload=JSON.parse(b64ToUtf8(code.trim()))
+      if(!payload || typeof payload!=='object') return null
+      return payload
+    }catch(e){ return null }
+  }
+
+  function applySharedPayload(payload){
+    const extra=(payload.holidays||[]).filter(d=>!baseHolidays.includes(d))
+    holidaysList=baseHolidays.concat(extra)
+    renderHolidaysList()
+    if(payload.horario){ horario=payload.horario }
+    compute()
+    actualizarHorario()
+    saveCurrentHolidaysForUser()
+    saveHorarioForUser()
+  }
+
+  const shareBtn=document.getElementById('shareBtn')
+  const shareBox=document.getElementById('shareBox')
+  const shareCodeOutput=document.getElementById('shareCodeOutput')
+  const shareLinkOutput=document.getElementById('shareLinkOutput')
+  const copyCodeBtn=document.getElementById('copyCodeBtn')
+  const copyLinkBtn=document.getElementById('copyLinkBtn')
+  const shareCopiedMsg=document.getElementById('shareCopiedMsg')
+
+  function refreshShareOutputs(){
+    const code=buildShareCode()
+    shareCodeOutput.value=code
+    shareLinkOutput.value=buildShareLink(code)
+  }
+
+  function refreshShareIfOpen(){
+    if(shareBox.style.display==='block'){ refreshShareOutputs() }
+  }
+
+  shareBtn.addEventListener('click',()=>{
+    const open=shareBox.style.display==='none'
+    shareBox.style.display=open?'block':'none'
+    shareCopiedMsg.style.display='none'
+    if(open){ refreshShareOutputs() }
+  })
+
+  function copyText(text){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      return navigator.clipboard.writeText(text)
+    }
+    // Fallback
+    const tmp=document.createElement('textarea')
+    tmp.value=text
+    document.body.appendChild(tmp)
+    tmp.select()
+    document.execCommand('copy')
+    document.body.removeChild(tmp)
+    return Promise.resolve()
+  }
+
+  copyCodeBtn.addEventListener('click',()=>{
+    const tr=translations[currentLang]
+    copyText(shareCodeOutput.value).then(()=>{
+      shareCopiedMsg.textContent=tr.copied
+      shareCopiedMsg.style.display='block'
+    })
+  })
+  copyLinkBtn.addEventListener('click',()=>{
+    const tr=translations[currentLang]
+    copyText(shareLinkOutput.value).then(()=>{
+      shareCopiedMsg.textContent=tr.copied
+      shareCopiedMsg.style.display='block'
+    })
+  })
+
+  const importToggleBtn=document.getElementById('importToggleBtn')
+  const importBox=document.getElementById('importBox')
+  const importCodeInput=document.getElementById('importCodeInput')
+  const importConfirmBtn=document.getElementById('importConfirmBtn')
+  const importMsg=document.getElementById('importMsg')
+
+  importToggleBtn.addEventListener('click',()=>{
+    const open=importBox.style.display==='none'
+    importBox.style.display=open?'block':'none'
+    importMsg.textContent=''
+    if(open){ importCodeInput.value=''; importCodeInput.focus() }
+  })
+
+  importConfirmBtn.addEventListener('click',()=>{
+    const tr=translations[currentLang]
+    const payload=decodeShareCode(importCodeInput.value)
+    if(!payload){
+      importMsg.style.color='#f87171'
+      importMsg.textContent=tr.importError
+      return
+    }
+    applySharedPayload(payload)
+    importMsg.style.color='#10b981'
+    importMsg.textContent=tr.importSuccess
+  })
+
+  // Detectar un código compartido en la URL (#import=CODIGO)
+  let pendingImportCode=null
+  if(window.location.hash && window.location.hash.indexOf('#import=')===0){
+    pendingImportCode=decodeURIComponent(window.location.hash.slice('#import='.length))
+  }
+
+  function checkPendingImport(){
+    if(!pendingImportCode) return
+    const tr=translations[currentLang]
+    const payload=decodeShareCode(pendingImportCode)
+    pendingImportCode=null
+    history.replaceState(null,'',window.location.pathname+window.location.search)
+    if(payload && confirm(tr.importConfirmPrompt)){
+      applySharedPayload(payload)
+    }
+  }
 
   // ================= APLICAR IDIOMA =================
   const langSelect=document.getElementById('langSelect')
@@ -969,6 +1185,15 @@ setInterval(actualizarHorario,60000)
     document.getElementById('nowLabelText').textContent=tr.nowLabel
     document.getElementById('nextLabelText').textContent=tr.nextLabel
     document.getElementById('gamesLinkText').textContent=tr.gamesLink
+    document.getElementById('shareBtnText').textContent=tr.shareBtn
+    document.getElementById('shareIntroText').textContent=tr.shareIntro
+    document.getElementById('shareCodeLabelText').textContent=tr.shareCodeLabel
+    document.getElementById('copyCodeBtnText').textContent=tr.copyCode
+    document.getElementById('shareLinkLabelText').textContent=tr.shareLinkLabel
+    document.getElementById('copyLinkBtnText').textContent=tr.copyLink
+    document.getElementById('importToggleBtnText').textContent=tr.importToggle
+    document.getElementById('importLabelText').textContent=tr.importLabel
+    document.getElementById('importConfirmBtnText').textContent=tr.importBtn
 
     const scheduleBoxEl=document.getElementById('scheduleBox')
     showScheduleBtnTextEl.textContent = scheduleBoxEl.style.display==='none' ? tr.viewSchedule : tr.closeSchedule
