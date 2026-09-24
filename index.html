@@ -925,7 +925,7 @@ setInterval(actualizarHorario,60000)
     loginError.textContent=''
   }
 
-  function doLogin(){
+  async function doLogin(){
     const name=loginUserInput.value.trim()
     const pin=loginPinInput.value
     const tr=translations[currentLang]
@@ -941,11 +941,8 @@ setInterval(actualizarHorario,60000)
     localStorage.setItem(CURRENT_USER_KEY,name)
 
     // Registrar visitante único
-    registerVisitor(name)
-
-    // Registrar visita
-    registerVisit()
-
+    await registerVisitor(name);
+    await registerVisit();
     showApp()
   }
 
