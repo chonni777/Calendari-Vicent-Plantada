@@ -262,6 +262,110 @@ function toggleMenu() {
     return new Date(p[0], p[1]-1, p[2]);
   }
 
+  // ================= SUPABASE ANALYTICS =================
+
+const SUPABASE_URL = "https://swgyelvyrohegzpvcsq.supabase.co";
+
+// Pega AQUÍ tu Publishable key de Supabase
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_FDOGYwx-pnkmlb8iRodPhQ_1886mbIW";
+
+const VISITOR_ID_KEY = "contador_analytics_visitor_id";
+const LAST_VISIT_KEY = "contador_analytics_last_visit";
+
+function getVisitorId() {
+  let id = localStorage.getItem(VISITOR_ID_KEY);
+
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem(VISITOR_ID_KEY, id);
+  }
+
+  return id;
+}
+
+async function registerVisitor(nickname) {
+
+  const visitorId = getVisitorId();
+
+  const alreadyRegistered =
+    localStorage.getItem("contador_analytics_registered");
+
+  if (alreadyRegistered) {
+    return visitorId;
+  }
+
+  const success = await supabaseInsert("visitors", {
+    id: visitorId,
+    nickname: nickname
+  });
+
+  if (success) {
+    localStorage.setItem(
+      "contador_analytics_registered",
+      "true"
+    );
+  }
+
+  return visitorId;
+}
+
+async function registerVisit() {
+
+  const visitorId = getVisitorId();
+
+  const lastVisit =
+    Number(localStorage.getItem(LAST_VISIT_KEY)) || 0;
+
+  const now = Date.now();
+
+  // Una nueva visita si han pasado al menos 30 minutos
+  const thirtyMinutes = 30 * 60 * 1000;
+
+  if (now - lastVisit < thirtyMinutes) {
+    return;
+  }
+
+  const success = await supabaseInsert("visits", {
+    visitor_id: visitorId
+  });
+
+  if (success) {
+    localStorage.setItem(
+      LAST_VISIT_KEY,
+      String(now)
+    );
+  }
+}
+
+async function supabaseInsert(table, data) {
+  try {
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/${table}`,
+      {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_PUBLISHABLE_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify(data)
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Supabase error:", errorText);
+      return false;
+    }
+
+    return true;
+
+  } catch (error) {
+    console.error("Error conectando con Supabase:", error);
+    return false;
+  }
+}
+
   // ================= IDIOMAS =================
   const translations = {
     es:{
@@ -835,6 +939,13 @@ setInterval(actualizarHorario,60000)
     }
     currentUser=name
     localStorage.setItem(CURRENT_USER_KEY,name)
+
+    // Registrar visitante único
+    registerVisitor(name)
+
+    // Registrar visita
+    registerVisit()
+
     showApp()
   }
 
@@ -1217,7 +1328,22 @@ setInterval(actualizarHorario,60000)
   langSelect.addEventListener('change',()=>{ applyLanguage(langSelect.value) })
 
   applyStaticTexts()
-  if(currentUser){ showApp() } else { showLogin() }
+  if(currentUser){
+
+  // Asegurarnos de que tiene ID analítico
+  getVisitorId();
+
+  // Registrar la visita actual
+  registerVisit();
+
+  showApp();
+
+}else{
+
+  showLogin();
+
+}
+
 </script>
 </body>
 </html>
