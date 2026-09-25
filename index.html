@@ -313,18 +313,7 @@ async function registerVisit() {
 
   const visitorId = getVisitorId();
 
-  const lastVisit =
-    Number(localStorage.getItem(LAST_VISIT_KEY)) || 0;
-
-  const now = Date.now();
-
-  // Una nueva visita si han pasado al menos 30 minutos
-  const thirtyMinutes = 30 * 60 * 1000;
-
-  if (now - lastVisit < thirtyMinutes) {
-    return;
-  }
-
+  // Cada login y cada apertura con sesión iniciada cuenta como visita
   const success = await supabaseInsert("visits", {
     visitor_id: visitorId
   });
@@ -332,7 +321,7 @@ async function registerVisit() {
   if (success) {
     localStorage.setItem(
       LAST_VISIT_KEY,
-      String(now)
+      String(Date.now())
     );
   }
 }
@@ -1327,13 +1316,10 @@ setInterval(actualizarHorario,60000)
   applyStaticTexts()
   if(currentUser){
 
-  // Asegurarnos de que tiene ID analítico
-  getVisitorId();
-
-  // Registrar la visita actual
-  registerVisit();
-
   showApp();
+
+  // Sesión ya iniciada al abrir la web: registrar visitante (si falta) y sumar visita
+  registerVisitor(currentUser).then(registerVisit);
 
 }else{
 
